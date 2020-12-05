@@ -1,7 +1,6 @@
 {
   "name": "code",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,6 +10,19 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "mysql": "^2.18.1",
     "nodemon": "^2.0.5"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BlueEnni/rest-api-server.git"
+  },
+  "bugs": {
+    "url": "https://github.com/BlueEnni/rest-api-server/issues"
+  },
+  "homepage": "https://github.com/BlueEnni/rest-api-server#readme",
+  "description": ""
 }
