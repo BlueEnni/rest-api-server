@@ -9,7 +9,7 @@ exports.genSalt = () => {
 
 //exort bycrypt.encrypt
 exports.encrypt = async(string, salt) => {
-    if (salt) return bcrypt.hash(string, salt)
+    if (salt) return await bcrypt.hash(string, salt)
     return bcrypt.hash(string, await this.genSalt());
 }
 
