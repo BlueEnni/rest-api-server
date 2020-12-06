@@ -28,6 +28,13 @@ app.use(express.static("public"));
 //custom routes
 app.post("/login", user.login);
 
+app.post("/signup", user.signup);
+
+
+app.get("/users", user.getAll);
+app.get("/users/:userId", user.getUser);
+app.patch("/users/:userId", user.patchUser);
+
 /*app.get([
     "/"
 

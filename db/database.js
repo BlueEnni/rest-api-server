@@ -12,7 +12,7 @@ exports.query = (sql, binding) => {
     const con = mysql.createConnection({
       host: 'localhost',
       user: 'root',
-      password: '',
+      password: 'password',
       database: 'stromanbieter'
     })
     con.query(sql, binding, (err, result, fields) => {
@@ -28,7 +28,7 @@ exports.query = (sql, binding) => {
   connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: ''
+    password: 'password'
   });
 
   connection.connect();
@@ -55,10 +55,13 @@ exports.query = (sql, binding) => {
   fistPromises.push(
     this.query(`CREATE TABLE IF NOT EXISTS users (
       id INTEGER AUTO_INCREMENT,
-      name VARCHAR(40),
-      lastname VARCHAR(40),
+      firstName VARCHAR(50),
+      lastName VARCHAR(50),
+      username VARCHAR(50),
+      email VARCHAR(50),
       password VARCHAR(62)
-      CHECK(LENGTH(NAME) >= 10),
+      CHECK(LENGTH(firstName) >= 2),
+      CHECK(LENGTH(lastName) >= 2),
       PRIMARY KEY (id)
       );`)
   );
@@ -127,7 +130,7 @@ const provideDatabase = exports.provideDatabase = async function provideDatabase
   })
   /*
     connection.connect();
-    
+
     // mit use verweise ich auf die DB die verwendet wird
     connection.query("CREATE DATABASE IF NOT EXISTS stromanbieter;");
     connection.query("USE stromanbieter;");
