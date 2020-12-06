@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="84a5d267-e065-41e6-ac7e-f26b3c9f4028" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Controller/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/user.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bcrypt/bcrypt.js" beforeDir="false" afterPath="$PROJECT_DIR$/bcrypt/bcrypt.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/db/database.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
@@ -36,6 +36,8 @@
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -47,6 +49,7 @@
       <option name="presentableId" value="Default" />
       <updated>1607246637440</updated>
       <workItem from="1607246638991" duration="6113000" />
+      <workItem from="1607272419410" duration="7835000" />
     </task>
     <servers />
   </component>
@@ -54,6 +57,10 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="2463" y="261" width="828" height="529" key="IDE.errors.dialog" timestamp="1607272519432">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2463" y="261" width="828" height="529" key="IDE.errors.dialog/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1607272519432" />
     <state x="2543" y="231" width="672" height="678" key="search.everywhere.popup" timestamp="1607247842369">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
@@ -64,8 +71,9 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/Controller/user.js</url>
+          <line>118</line>
           <properties lambdaOrdinal="-1" />
-          <option name="timeStamp" value="1" />
+          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
