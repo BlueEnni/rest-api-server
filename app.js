@@ -1,3 +1,5 @@
+// As early as possible in your application, require and configure dotenv.
+require('dotenv').config()
 const express = require("express");
 const db = require("./db/database");
 const bycrypt = require("./bcrypt/bcrypt");
@@ -9,7 +11,6 @@ const user = require("./Controller/user");
 // access policy (restrict access origins) allows all routes /customization of access
 const cors = require('cors')
 
-db.provideDatabase();
 const app = express();
 
 //for (body) json transcoding
@@ -34,32 +35,32 @@ app.post("/signup", user.signup);
 app.get("/users", user.getAll);
 app.get("/users/:userId", user.getUser);
 app.patch("/users/:userId", user.patchUser);
+app.delete("/users/:userId", user.deleteUser);
 
-/*app.get([
-    "/"
-
-], async (req, res, next) => {
-    try {
-        //const con = await db.provideDatabase();
-        /*console.log(con.query(`SELECT *
-        FROM stromanbieter`)
-
-        res.json(await db.query(`SELECT *
-        FROM stromanbieter`))
-    } catch (e) {
-        next(e)
-    }
-});
-*/
 
 app.use((err, req, res, next) => {
-    res.status(500).send(err.message);
-});
 
-app.listen(
-    3000,
-    () => {
-        console.log("app.listening")
+    const response = {
+        message: err.message || 'Es ist ein Fehler aufgetreten',
+        status: !isNaN(err.statusCode) && err.statusCode || 500,
+    }
+    if (process.env.ENVRIONMENT === 'dev') {
+        response.error = err.stack.split('\n    ');
     }
 
-);
+    res
+        .status( response.status )
+        .send(response);
+});
+
+app.listen( 3000, async () => {
+    try {
+        console.log("app starting ...")
+        await db.createTables();
+        console.log("app listening: http://localhost:3000")
+    } catch (e) {
+        console.error("app could not start")
+        throw(e);
+    }
+
+});

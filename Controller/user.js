@@ -1,4 +1,5 @@
 const { response } = require('express');
+const moment = require('moment');
 const db = require('../db/database');
 const bcrypt = require("../bcrypt/bcrypt");
 const jwt = require('../Controller/jwt')
@@ -36,6 +37,7 @@ exports.patchUser = async (req, res, next) => {
         SELECT *
         FROM users
         WHERE id = ?
+        AND deletedAt IS null
         `, userId);
 
         if (users.length === 0) {
@@ -69,7 +71,8 @@ exports.patchUser = async (req, res, next) => {
         await db.query(`
         UPDATE users
         SET firstName = ?, lastName = ?, username = ?, email = ?, password = ?
-        `, [user.firstName, user.lastName, user.username, user.email, user.password])
+        `, [user.firstName, user.lastName, user.username, user.email, user.password]
+        );
 
         res.status(200).send()
 
@@ -87,6 +90,7 @@ exports.getUser = async (req, res, next) => {
         SELECT id,firstName,lastName, username, email
         FROM users
         WHERE id = ?
+        AND deletedAt IS null
         `, userId);
 
         if (users.length === 0) {
@@ -109,6 +113,7 @@ exports.getAll = async (req, res, next) => {
         const users = await db.query(`
         SELECT id,firstName,lastName, username, email
         FROM users
+        WHERE deletedAt IS null
         `);
 
         res.json(users);
@@ -120,6 +125,35 @@ exports.getAll = async (req, res, next) => {
 }
 
 
+
+exports.deleteUser = async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+        const dbCon = await db.getConnection();
+        const users = await dbCon.query(`
+        SELECT * 
+        FROM users
+        WHERE id = ?;
+        `, userId);
+
+        if (users.length === 0 ) {
+            const err = new Error('User existiert nicht');
+            err.statusCode = 404;
+            return next(err);
+        }
+
+        const deleteUserRes = await dbCon.query(`
+        UPDATE users
+        SET deletedAt = ?
+        `, [new Date()]);
+
+        res.status(200).send();
+    } catch (e) {
+        console.log(e);
+        e.statusCode = 500;
+        return next(e)
+    }
+}
 
 exports.login = async (req, res, next) => {
     try {
@@ -147,6 +181,15 @@ exports.login = async (req, res, next) => {
         const user = users[0];
 
         if(user && await bcrypt.compare(password, user.password)) {
+
+            if (user.deletedAt) {
+                const deletedAt = new Date(user.deletedAt);
+                const deletedAtFormatted = moment(deletedAt).format('YYYY-MM-DD')
+
+                const e = new Error(`User gelöscht am ${ deletedAtFormatted }`);
+                e.statusCode = 400;
+                return next(e)
+            }
 
             const userPayload = {
                 userId: user.id,
