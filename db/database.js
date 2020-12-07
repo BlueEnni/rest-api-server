@@ -77,6 +77,20 @@ exports.createTables = async () => {
   )
 
   createTablePromises.push(
+    dbConnection.query( `
+      CREATE TABLE IF NOT EXISTS rates (
+      id INTEGER AUTO_INCREMENT,
+      tarifName VARCHAR(255),
+      plz VARCHAR(5),
+      fixkosten FLOAT NOT NULL,
+      variableKosten FLOAT NOT NULL,
+      deactivatedAt DATETIME
+      CHECK(LENGTH(plz) = 5 AND LENGTH(tarifName) > 0),
+      PRIMARY KEY (id)
+    );` )
+)
+
+  createTablePromises.push(
       dbConnection.query(`
         CREATE TABLE IF NOT EXISTS users (
         id INTEGER AUTO_INCREMENT,
