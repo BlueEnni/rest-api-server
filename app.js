@@ -6,6 +6,13 @@ const bycrypt = require("./bcrypt/bcrypt");
 //export von objectmember als constanten const {login, register} = require("./Controller/user");
 //export von objectmembern als array const [val1, val2] = [1, 2, 3];
 const user = require("./Controller/user");
+
+/**
+ * path module
+ * @const
+ * @type {path.PlatformPath | path}
+ */
+const path = require("path")
 //conection encryption
 
 // access policy (restrict access origins) allows all routes /customization of access
@@ -28,7 +35,6 @@ app.use(express.static("public"));
 
 //custom routes
 app.post("/login", user.login);
-
 app.post("/signup", user.signup);
 
 
@@ -36,14 +42,20 @@ app.get("/users", user.getAll);
 app.get("/users/:userId", user.getUser);
 app.patch("/users/:userId", user.patchUser);
 app.delete("/users/:userId", user.deleteUser);
+// @todo
+// app.get("/users/:userId/orders");
 
+app.all('/?*', (req,res ,next) => {
+    res.sendFile(path.join(__dirname, "uploads", "private", "404.html"))
+})
 
 app.use((err, req, res, next) => {
 
     const response = {
         message: err.message || 'Es ist ein Fehler aufgetreten',
-        status: !isNaN(err.statusCode) && err.statusCode || 500,
+        status: Number(err.statusCode) || 500,
     }
+
     if (process.env.ENVRIONMENT === 'dev') {
         response.error = err.stack.split('\n    ');
     }
