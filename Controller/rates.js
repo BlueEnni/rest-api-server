@@ -4,8 +4,172 @@ const results = [];
 const path = require('path')
 const db = require('../db/database')
 
+/**
+ * Rate with all properties.
+ * @typedef {{id: Number, tarifName: string, plz: string, fixkosten: Number, variableKosten: Number, deactivatedAt: Date }} Rate
+ */
 
 
+/**
+ * Patches one rates.
+ * @function
+ * @async
+ * @param req {e.Request}
+ * @param res {e.Response}
+ * @param next {e.NextFunction}
+ */
+exports.patchRate = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      const err = new Error("Id muss eine Zahl sein");
+      err.statusCode = 400;
+      return next(err)
+    }
+
+    const rates = await db.query(`
+      SELECT id, tarifName, plz, fixkosten, variableKosten
+      FROM rates
+      WHERE deactivatedAt IS NULL
+      AND id = ?
+    `, id);
+
+    if (rates.length === 0) {
+      err.sendStatus(404)
+    }
+
+    const {tarifName, plz, fixkosten, variableKosten} = req.body;
+
+    /**
+     * Rate to be edited
+     * @type {Rate}
+     */
+    let rate = rates.shift();
+
+    if ("tarifName" in req.body) rate.tarifName = tarifName;
+    if ("plz" in req.body) rate.plz = plz;
+    if ("fixkosten" in req.body) rate.fixkosten = fixkosten;
+    if ("variableKosten" in req.body) rate.variableKosten = variableKosten;
+
+    await db.query(`
+    UPDATE rates
+    SET tarifName = ?
+    , plz = ?
+    , fixkosten = ?
+    , variableKosten = ?
+    WHERE id = ?
+    AND deactivatedAt IS NULL
+    `, [rate.tarifName, rate.plz, rate.fixkosten, rate.variableKosten, rate.id]);
+
+    res.sendStatus(200)
+
+  } catch (e) {
+    next(new Error())
+  }
+}
+
+/**
+ * Deletes one rates.
+ * @function
+ * @async
+ * @param req {e.Request}
+ * @param res {e.Response}
+ * @param next {e.NextFunction}
+ */
+exports.deleteRate = async (req, res, next) => {
+  try {
+
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      const err = new Error("Id muss eine Zahl sein");
+      err.statusCode = 400;
+      return next(err)
+    }
+
+    const result = await db.query(`
+    UPDATE rates
+    SET deactivatedAt = ?
+    WHERE id = ?
+    AND deactivatedAt IS NULL
+    `, [new Date(), id]);
+
+    if (result.affectedRows === 0) {
+      return res.sendStatus(404);
+    }
+
+    res.sendStatus(200)
+
+  } catch (e) {
+    const err = new Error()
+    err.statusCode = 500;
+    next(err)
+  }
+}
+
+/**
+ * Returns one rates.
+ * @function
+ * @async
+ * @param req {e.Request}
+ * @param res {e.Response}
+ * @param next {e.NextFunction}
+ */
+exports.getRateDetails = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      const err = new Error("Id muss eine Zahl sein");
+      err.statusCode = 400;
+      return next(err)
+    }
+
+    const rates = await db.query(`
+      SELECT id, tarifName, plz, fixkosten, variableKosten
+      FROM rates
+      WHERE deactivatedAt IS NULL
+      AND id = ?
+    `, id);
+
+    if (rates.length === 0) {
+      err.sendStatus(404)
+    }
+
+    const rate = rates.shift();
+
+    res.json(rate);
+  } catch (e) {
+    const err = new Error()
+    err.statusCode = 500;
+    next(err)
+  }
+}
+
+
+/**
+ * Returns all active rates.
+ * @function
+ * @async
+ * @param req {e.Request}
+ * @param res {e.Response}
+ * @param next {e.NextFunction}
+ */
+exports.getAllRates = async (req, res, next) => {
+  try {
+    const rates = await db.query(`
+    SELECT id, tarifName, plz, fixkosten, variableKosten
+    FROM rates
+    WHERE deactivatedAt IS NULL
+    `)
+    res.json(rates)
+  } catch (e) {
+    const err = new Error()
+    err.statusCode = 500;
+    next(err)
+  }
+}
 
 
 //@todo rename csv importfile to data.csv before usage
@@ -38,6 +202,6 @@ exports.importcsv = async (req, res) => {
   .on('end', () => {
     console.log(results);
     res.json(results);
-    
+
   });
 }
