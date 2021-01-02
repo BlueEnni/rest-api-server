@@ -6,6 +6,9 @@ const bycrypt = require("./bcrypt/bcrypt");
 //export von objectmember als constanten const {login, register} = require("./Controller/user");
 //export von objectmembern als array const [val1, val2] = [1, 2, 3];
 const user = require("./Controller/user");
+const rates = require("./Controller/rates")
+//fileupload
+const multer = require('multer');
 
 /**
  * path module
@@ -13,15 +16,20 @@ const user = require("./Controller/user");
  * @type {path.PlatformPath | path}
  */
 const path = require("path")
-//conection encryption
 
+//conection encryption
 // access policy (restrict access origins) allows all routes /customization of access
 const cors = require('cors')
-
 const app = express();
-
 //for (body) json transcoding
 const bodyParser = require('body-parser');
+
+
+//storage
+const storage = multer({
+    dest: './upload/'
+  });
+
 
 //custom
 // allow all cors
@@ -40,6 +48,7 @@ app.post("/signup", user.signup);
 
 app.get("/users", user.getAll);
 app.get("/users/:userId", user.getUser);
+app.post("/ratesupload", storage.single('csv'), rates.importcsv);
 app.patch("/users/:userId", user.patchUser);
 app.delete("/users/:userId", user.deleteUser);
 // @todo
