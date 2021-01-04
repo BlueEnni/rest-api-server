@@ -7,6 +7,7 @@ const bycrypt = require("./bcrypt/bcrypt");
 //export von objectmembern als array const [val1, val2] = [1, 2, 3];
 const user = require("./Controller/user");
 const rates = require("./Controller/rates")
+const orders = require("./Controller/orders")
 //fileupload
 const multer = require('multer');
 //conection encryption
@@ -35,15 +36,28 @@ app.use(express.static("public"));
 
 //custom routes
 app.post("/login", user.login);
-
 app.post("/signup", user.signup);
 
 
 app.get("/users", user.getAll);
 app.get("/users/:userId", user.getUser);
-app.post("/ratesupload", storage.single('csv'), rates.importcsv);
 app.patch("/users/:userId", user.patchUser);
 app.delete("/users/:userId", user.deleteUser);
+
+
+app.get("/rates", rates.getAllRates)
+app.get("/rates/:id", rates.getRateDetails)
+app.patch("/rates/:id", rates.patchRate)
+app.delete("/rates/:id", rates.deleteRate)
+
+app.get("/orders", orders.getAllOrders)
+app.get("/orders/:id", orders.getOrderDetails)
+app.post("/orders", orders.postOrder)
+app.patch("/orders/:id", orders.patchOrder)
+app.delete("/orders/:id", orders.deleteOrder)
+
+
+app.post("/ratesupload", storage.single('csv'), rates.importcsv);
 
 
 app.use((err, req, res, next) => {
