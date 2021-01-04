@@ -4,6 +4,9 @@
     <list default="true" id="84a5d267-e065-41e6-ac7e-f26b3c9f4028" name="Default Changelist" comment="">
       <change afterPath="$PROJECT_DIR$/uploads/private/404.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Controller/rates.js" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/rates.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/db/database.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +67,14 @@
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2463" y="261" width="828" height="529" key="IDE.errors.dialog/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1607272519432" />
+    <state x="2533" y="141" width="687" height="768" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1609598078511">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2533" y="141" width="687" height="768" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1609598078511" />
+    <state x="2542" y="238" key="run.anything.popup" timestamp="1609601842919">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2542" y="238" key="run.anything.popup/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1609601842919" />
     <state x="2543" y="231" width="672" height="678" key="search.everywhere.popup" timestamp="1607247842369">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>

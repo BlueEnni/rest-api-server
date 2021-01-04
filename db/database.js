@@ -8,7 +8,6 @@ const pool = exports.pool = mysql.createPool( {
   database: process.env.DB_NAME
 } );
 
-
 const query = exports.query = async ( query, bindings ) => {
   return new Promise( ( resolve, reject ) => {
 
@@ -26,12 +25,24 @@ const query = exports.query = async ( query, bindings ) => {
   } )
 }
 
+/**
+ *
+ * @type {function(): Promise<{query: Function, release: Function}>}
+ */
 const getConnection = exports.getConnection = async () => {
   return new Promise( ( resolve, reject ) => {
 
     pool.getConnection( ( err, connection ) => {
       if (err) reject( err )
       resolve( {
+        /**
+         * Query Function
+         * @function
+         * @async
+         * @param {string} query
+         * @param {object} bindings
+         * @return {Promise}
+         */
         query: ( query, bindings ) => {
 
           const startDate = new Date();
@@ -48,6 +59,12 @@ const getConnection = exports.getConnection = async () => {
             } )
           } )
         },
+        /**
+         * Release Connection back to pool
+         * @function
+         * @async
+         * @return {Promise}
+         */
         release: () => {
           return new Promise( ( resolve, reject ) => {
             if (err) reject( err );
@@ -121,6 +138,21 @@ exports.createTables = async () => {
       FOREIGN KEY (userId) 
       REFERENCES users(id)
       ON DELETE CASCADE
+      );` );
+
+  await dbConnection.query( `
+      CREATE TABLE IF NOT EXISTS orders (
+      id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
+      
+      , userId INTEGER
+      , rateId INTEGER
+      , addressId INTEGER
+      , consumption INTEGER
+      , deletedAt DATETIME
+      
+      , FOREIGN KEY (addressId) REFERENCES addresses(id)
+      , FOREIGN KEY (rateId) REFERENCES rates(id)
+      , FOREIGN KEY (userId) REFERENCES users(id)
       );` );
 
   dbConnection.release();
