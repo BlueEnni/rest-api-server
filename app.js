@@ -1,14 +1,10 @@
-// As early as possible in your application, require and configure dotenv.
 require('dotenv').config()
 const express = require("express");
 const db = require("./db/database");
 const bycrypt = require("./bcrypt/bcrypt");
-//export von objectmember als constanten const {login, register} = require("./Controller/user");
-//export von objectmembern als array const [val1, val2] = [1, 2, 3];
 const user = require("./Controller/user");
 const rates = require("./Controller/rates")
 const orders = require("./Controller/orders")
-//fileupload
 const multer = require('multer');
 
 /**
@@ -18,31 +14,21 @@ const multer = require('multer');
  */
 const path = require("path")
 
-//conection encryption
-// access policy (restrict access origins) allows all routes /customization of access
 const cors = require('cors')
 const app = express();
-//for (body) json transcoding
 const bodyParser = require('body-parser');
 
 
-//storage
 const storage = multer({
     dest: './upload/'
-  });
+});
 
 
-//custom
-// allow all cors
 app.use(cors());
-// parse json body of req
 app.use(bodyParser.json());
-
-
-//default
 app.use(express.static("public"));
 
-//custom routes
+
 app.post("/login", user.login);
 app.post("/signup", user.signup);
 
@@ -54,7 +40,7 @@ app.delete("/users/:userId", user.deleteUser);
 // @todo
 // app.get("/users/:userId/orders");
 
-app.all('/?*', (req,res ,next) => {
+app.all('/?*', (req, res, next) => {
     res.sendFile(path.join(__dirname, "uploads", "private", "404.html"))
 })
 
@@ -72,7 +58,9 @@ app.delete("/orders/:id", orders.deleteOrder)
 
 app.post("/ratesupload", storage.single('csv'), rates.importcsv);
 
-
+/**
+ * sends error - if a server error occurs (default function)
+ */
 app.use((err, req, res, next) => {
 
     const response = {
@@ -85,18 +73,21 @@ app.use((err, req, res, next) => {
     }
 
     res
-        .status( response.status )
+        .status(response.status)
         .send(response);
 });
 
-app.listen( 3000, async () => {
+/**
+ * creates a webserver on port 3000
+ */
+app.listen(3000, async () => {
     try {
         console.log("app starting ...")
         await db.createTables();
         console.log("app listening: http://localhost:3000")
     } catch (e) {
         console.error("app could not start")
-        throw(e);
+        throw (e);
     }
 
 });
