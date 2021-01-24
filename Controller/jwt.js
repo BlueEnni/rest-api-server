@@ -1,11 +1,15 @@
 const jwt = require('jsonwebtoken');
 const jwtConf = require('../config-files/jwt')
 
-
+/**
+ * encodes the payload
+ * @param {*} payload 
+ * @returns {string}
+ * @throws {Error}
+ */
 exports.encode = (payload) => {
 	return new Promise((resolve, reject) => {
 
-		// Math.floor => runden
 		console.log(payload)
 
 		const payloadWithMetaData = {
@@ -18,7 +22,7 @@ exports.encode = (payload) => {
 
 		jwt.sign(payloadWithMetaData, jwtConf.jwtKey, { algorithm: jwtConf.algorithm }, (err, token) => {
 			if (err) {
-				reject( err )
+				reject(err)
 			}
 			else resolve(token)
 		})
@@ -26,6 +30,12 @@ exports.encode = (payload) => {
 	})
 }
 
+/**
+ * decodes payload with jwtKey
+ * @argument {string}
+ * @returns {string}
+ * @throws {Err}
+ */
 exports.decode = (token) => {
 	return new Promise((resolve, reject) => {
 

@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(){
     console.log(this.route.snapshot);
-    //_ für private Variablen
     this.loginForm = this._formBuilder.group({
       username: this._formBuilder.control('beschte'),
       password: this._formBuilder.control('1234'),
@@ -37,33 +36,18 @@ export class HomeComponent implements OnInit {
       console.log(this.loginForm);
     })
   }
- /*
-  getAll(){
-    this.httpClient.get('http://localhost:3000/').subscribe( users => {
-    // users ist die antwort vom server
-  })
-  }*/
   
   userLogin(){
     const {username: username2 = '', password} = this.loginForm.value;
-    // kürzt ab :
-    // username2 = this.loginForm.value.username
-    // password = this.loginForm.value.password
-    // const [test1,test2] = [1,2,3];
-    // console.log({username2, password, test1, test2});
     const body = {
       username: username2,
       password
     }
-    // body.username = username2;
-    this.http.post('http://localhost:3000/login', body).subscribe(res => {
-        // res ist die server response
-        // die and .subscribe funktion übergebende funktion läuft wenn der resquest beendet ist
 
+    this.http.post('http://localhost:3000/login', body).subscribe(res => {
         console.log(res);
       
     }, (err) => {
-      // browser alert - popupfenster
       this.error = err.error;
       alert(err.error);
     })

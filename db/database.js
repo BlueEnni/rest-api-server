@@ -1,28 +1,36 @@
-const mysql = require( 'mysql' );
+const mysql = require('mysql');
 
-const pool = exports.pool = mysql.createPool( {
+const pool = exports.pool = mysql.createPool({
   connectionLimit: 5,
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_USER_PASSWORD,
   database: process.env.DB_NAME
-} );
+});
 
-const query = exports.query = async ( query, bindings ) => {
-  return new Promise( ( resolve, reject ) => {
+/**
+ * send query
+ * @function
+ * @async
+ * @param {string} query
+ * @param {any|Array<any>} bindings
+ * @returns {Promise<Array<Object>>}
+ */
+const query = exports.query = async (query, bindings) => {
+  return new Promise((resolve, reject) => {
 
     const startDate = new Date();
 
-    pool.query( query, bindings, ( error, results, fields ) => {
+    pool.query(query, bindings, (error, results, fields) => {
 
       const endDate = new Date();
-      console.log(`executed query: ${ endDate.getTime() - startDate.getTime()}ms`)
+      console.log(`executed query: ${endDate.getTime() - startDate.getTime()}ms`)
 
-      if (error) reject( error );
-      resolve( results );
-    } )
+      if (error) reject(error);
+      resolve(results);
+    })
 
-  } )
+  })
 }
 
 /**
@@ -30,11 +38,11 @@ const query = exports.query = async ( query, bindings ) => {
  * @type {function(): Promise<{query: Function, release: Function}>}
  */
 const getConnection = exports.getConnection = async () => {
-  return new Promise( ( resolve, reject ) => {
+  return new Promise((resolve, reject) => {
 
-    pool.getConnection( ( err, connection ) => {
-      if (err) reject( err )
-      resolve( {
+    pool.getConnection((err, connection) => {
+      if (err) reject(err)
+      resolve({
         /**
          * Query Function
          * @function
@@ -43,21 +51,21 @@ const getConnection = exports.getConnection = async () => {
          * @param {object} bindings
          * @return {Promise}
          */
-        query: ( query, bindings ) => {
+        query: (query, bindings) => {
 
           const startDate = new Date();
 
-          return new Promise( ( resolve1, reject1 ) => {
-            connection.query( query, bindings, ( error, results, fields ) => {
+          return new Promise((resolve1, reject1) => {
+            connection.query(query, bindings, (error, results, fields) => {
 
               const endDate = new Date();
 
-              console.log(`executed query: ${query} ${ endDate.getTime() - startDate.getTime()}ms`)
+              console.log(`executed query: ${query} ${endDate.getTime() - startDate.getTime()}ms`)
 
-              if (error) reject1( error );
-              resolve1( results );
-            } )
-          } )
+              if (error) reject1(error);
+              resolve1(results);
+            })
+          })
         },
         /**
          * Release Connection back to pool
@@ -66,23 +74,28 @@ const getConnection = exports.getConnection = async () => {
          * @return {Promise}
          */
         release: () => {
-          return new Promise( ( resolve, reject ) => {
-            if (err) reject( err );
-            console.log( "MySQL pool released: threadId " + connection.threadId );
-            resolve( connection.release() );
-          } )
+          return new Promise((resolve, reject) => {
+            if (err) reject(err);
+            console.log("MySQL pool released: threadId " + connection.threadId);
+            resolve(connection.release());
+          })
         }
-      } )
-    } );
-  } )
+      })
+    });
+  })
 }
 
+/**
+ * creates Tables
+ * @function
+ * @async
+ */
 exports.createTables = async () => {
   const createTablePromises = [];
   const dbConnection = await getConnection();
 
   createTablePromises.push(
-      dbConnection.query( `
+    dbConnection.query(`
         CREATE TABLE IF NOT EXISTS stromanbieter (
         id INTEGER AUTO_INCREMENT,
         name VARCHAR(60),
@@ -94,7 +107,7 @@ exports.createTables = async () => {
   )
 
   createTablePromises.push(
-    dbConnection.query( `
+    dbConnection.query(`
       CREATE TABLE IF NOT EXISTS rates (
       id INTEGER AUTO_INCREMENT,
       tarifName VARCHAR(255),
@@ -105,10 +118,10 @@ exports.createTables = async () => {
       CHECK(LENGTH(plz) = 5 AND LENGTH(tarifName) > 0),
       PRIMARY KEY (id)
     );` )
-)
+  )
 
   createTablePromises.push(
-      dbConnection.query(`
+    dbConnection.query(`
         CREATE TABLE IF NOT EXISTS users (
         id INTEGER AUTO_INCREMENT,
         firstName VARCHAR(50),
@@ -123,10 +136,10 @@ exports.createTables = async () => {
       `)
   );
 
-  // wait for unrelated tables to be created
-  await Promise.all( createTablePromises );
 
-  await dbConnection.query( `
+  await Promise.all(createTablePromises);
+
+  await dbConnection.query(`
       CREATE TABLE IF NOT EXISTS addresses (
       id INTEGER AUTO_INCREMENT,
       street VARCHAR(60),
@@ -140,7 +153,7 @@ exports.createTables = async () => {
       ON DELETE CASCADE
       );` );
 
-  await dbConnection.query( `
+  await dbConnection.query(`
       CREATE TABLE IF NOT EXISTS orders (
       id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
       

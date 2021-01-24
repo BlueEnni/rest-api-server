@@ -1,19 +1,32 @@
 const bcrypt = require('bcrypt');
-//config-file with password
 const bcryptConf = require('../config-files/bcryptConf');
 
-//export bycrypt.genSalt
+/**
+ * generates salt
+ * @returns {string}
+ */
 exports.genSalt = () => {
     return bcrypt.genSalt(bcryptConf.saltRounds);
 }
 
-//exort bycrypt.encrypt
-exports.encrypt = async(string, salt) => {
+
+/**
+ * encrypts a given string with a salt
+ * @param {string} string 
+ * @param {string} salt 
+ * @returns {string}
+ */
+exports.encrypt = async (string, salt) => {
     if (salt) return await bcrypt.hash(string, salt)
     return bcrypt.hash(string, await this.genSalt());
 }
 
-//export bycrypt.compare
-exports.compare = async(string, hash) =>  {
+/**
+ * compares string with hash
+ * @param {string} string 
+ * @param {string} hash 
+ * @returns {boolean}
+ */
+exports.compare = async (string, hash) => {
     return bcrypt.compare(string, hash);
 }

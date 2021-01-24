@@ -1,4 +1,5 @@
-const csv = require('csv-parser')
+const csv = require('csv-parser');
+const e = require('express');
 const fs = require('fs')
 const results = [];
 const path = require('path')
@@ -17,6 +18,7 @@ const db = require('../db/database')
  * @param req {e.Request}
  * @param res {e.Response}
  * @param next {e.NextFunction}
+ * @returns {any}
  */
 exports.patchRate = async (req, res, next) => {
   try {
@@ -39,7 +41,7 @@ exports.patchRate = async (req, res, next) => {
       err.sendStatus(404)
     }
 
-    const {tarifName, plz, fixkosten, variableKosten} = req.body;
+    const { tarifName, plz, fixkosten, variableKosten } = req.body;
 
     /**
      * Rate to be edited
@@ -60,7 +62,7 @@ exports.patchRate = async (req, res, next) => {
     , variableKosten = ?
     WHERE id = ?
     AND deactivatedAt IS NULL
-    `, [rate.tarifName, rate.plz, rate.fixkosten, rate.variableKosten, rate.id]);
+    `, [ rate.tarifName, rate.plz, rate.fixkosten, rate.variableKosten, rate.id ]);
 
     res.sendStatus(200)
 
@@ -76,6 +78,7 @@ exports.patchRate = async (req, res, next) => {
  * @param req {e.Request}
  * @param res {e.Response}
  * @param next {e.NextFunction}
+ * @returns {any}
  */
 exports.deleteRate = async (req, res, next) => {
   try {
@@ -93,7 +96,7 @@ exports.deleteRate = async (req, res, next) => {
     SET deactivatedAt = ?
     WHERE id = ?
     AND deactivatedAt IS NULL
-    `, [new Date(), id]);
+    `, [ new Date(), id ]);
 
     if (result.affectedRows === 0) {
       return res.sendStatus(404);
@@ -115,6 +118,7 @@ exports.deleteRate = async (req, res, next) => {
  * @param req {e.Request}
  * @param res {e.Response}
  * @param next {e.NextFunction}
+ * @returns {any}
  */
 exports.getRateDetails = async (req, res, next) => {
   try {
@@ -155,6 +159,7 @@ exports.getRateDetails = async (req, res, next) => {
  * @param req {e.Request}
  * @param res {e.Response}
  * @param next {e.NextFunction}
+ * @returns {any}
  */
 exports.getAllRates = async (req, res, next) => {
   try {
@@ -173,35 +178,41 @@ exports.getAllRates = async (req, res, next) => {
 
 
 //@todo rename csv importfile to data.csv before usage
-//import der Datei in die Datenbank
+/**
+ * imports csv file
+ * @function
+ * @async
+ * @param {e.Request} req 
+ * @param {e.Response} res 
+ * @returns {Array}
+ */
 exports.importcsv = async (req, res) => {
   const filepath = path.dirname(__dirname);
   const connection = await db.getConnection();
   await connection.query('UPDATE rates SET deactivatedAt = ? WHERE 1=1', new Date());
   console.log(filepath);
-  console.log(filepath +'../upload/data.csv');
-    //upload in app.js (multer - upload.single)
+  console.log(filepath + '../upload/data.csv');
   fs.createReadStream(req.file.path)
-  .pipe(csv({
-    separator: ';'
-  }))
-  .on('data', (data) => {
-    const dataArray = Object.values(data);
-    const formattedData = [
-      dataArray[0],
-      dataArray[1],
-      Number(dataArray[2].replace(',', '.')),
-      Number(dataArray[3].replace(',', '.'))
-    ]
-    connection.query('INSERT INTO rates (tarifName, plz, fixkosten, variableKosten) VALUES (?, ?, ?, ?)', formattedData);
+    .pipe(csv({
+      separator: ';'
+    }))
+    .on('data', (data) => {
+      const dataArray = Object.values(data);
+      const formattedData = [
+        dataArray[ 0 ],
+        dataArray[ 1 ],
+        Number(dataArray[ 2 ].replace(',', '.')),
+        Number(dataArray[ 3 ].replace(',', '.'))
+      ]
+      connection.query('INSERT INTO rates (tarifName, plz, fixkosten, variableKosten) VALUES (?, ?, ?, ?)', formattedData);
 
-    results.push(formattedData);
+      results.push(formattedData);
 
 
-  })
-  .on('end', () => {
-    console.log(results);
-    res.json(results);
+    })
+    .on('end', () => {
+      console.log(results);
+      res.json(results);
 
-  });
+    });
 }
