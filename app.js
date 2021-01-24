@@ -10,6 +10,14 @@ const rates = require("./Controller/rates")
 const orders = require("./Controller/orders")
 //fileupload
 const multer = require('multer');
+
+/**
+ * path module
+ * @const
+ * @type {path.PlatformPath | path}
+ */
+const path = require("path")
+
 //conection encryption
 // access policy (restrict access origins) allows all routes /customization of access
 const cors = require('cors')
@@ -43,7 +51,12 @@ app.get("/users", user.getAll);
 app.get("/users/:userId", user.getUser);
 app.patch("/users/:userId", user.patchUser);
 app.delete("/users/:userId", user.deleteUser);
+// @todo
+// app.get("/users/:userId/orders");
 
+app.all('/?*', (req,res ,next) => {
+    res.sendFile(path.join(__dirname, "uploads", "private", "404.html"))
+})
 
 app.get("/rates", rates.getAllRates)
 app.get("/rates/:id", rates.getRateDetails)
@@ -64,8 +77,9 @@ app.use((err, req, res, next) => {
 
     const response = {
         message: err.message || 'Es ist ein Fehler aufgetreten',
-        status: !isNaN(err.statusCode) && err.statusCode || 500,
+        status: Number(err.statusCode) || 500,
     }
+
     if (process.env.ENVRIONMENT === 'dev') {
         response.error = err.stack.split('\n    ');
     }
