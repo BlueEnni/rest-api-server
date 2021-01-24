@@ -54,9 +54,7 @@ app.delete("/users/:userId", user.deleteUser);
 // @todo
 // app.get("/users/:userId/orders");
 
-app.all('/?*', (req,res ,next) => {
-    res.sendFile(path.join(__dirname, "uploads", "private", "404.html"))
-})
+
 
 app.get("/rates", rates.getAllRates)
 app.get("/rates/:id", rates.getRateDetails)
@@ -64,14 +62,18 @@ app.patch("/rates/:id", rates.patchRate)
 app.delete("/rates/:id", rates.deleteRate)
 
 app.get("/orders", orders.getAllOrders)
-app.get("/orders/:id", orders.getOrderDetails)
+app.get("/orders/:orderId", orders.getOrderDetails)
 app.post("/orders", orders.postOrder)
-app.patch("/orders/:id", orders.patchOrder)
-app.delete("/orders/:id", orders.deleteOrder)
+app.patch("/orders/:orderId", orders.patchOrder)
+app.delete("/orders/:orderId", orders.deleteOrder)
 
 
 app.post("/ratesupload", storage.single('csv'), rates.importcsv);
 
+
+app.all('/?*', (req,res ,next) => {
+    res.sendFile(path.join(__dirname, "uploads", "private", "404.html"))
+})
 
 app.use((err, req, res, next) => {
 
