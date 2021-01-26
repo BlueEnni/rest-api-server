@@ -19,13 +19,23 @@ import {MatButtonModule} from '@angular/material/button';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
+import { RegistrationComponent } from './registration/registration.component';
+import {MatListModule} from '@angular/material/list';
+import { SearchComponent } from './search/search.component';
+import { MyRatesComponent } from './my-rates/my-rates.component';
+import { RatesComponent } from './rates/rates.component';
+import {MatStepperModule} from '@angular/material/stepper';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     TestComponent,
-    NotFoundErrorComponent
+    NotFoundErrorComponent,
+    RegistrationComponent,
+    SearchComponent,
+    MyRatesComponent,
+    RatesComponent
   ],
   imports: [
     BrowserModule,
@@ -38,7 +48,9 @@ import {MatIconModule} from '@angular/material/icon';
     MatButtonModule,
     FlexLayoutModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatListModule,
+    MatStepperModule
   ],
   providers: [],
   bootstrap: [AppComponent]
