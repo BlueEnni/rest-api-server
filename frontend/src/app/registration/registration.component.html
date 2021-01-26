@@ -1,0 +1,93 @@
+<div class="content" fxLayout="row" fxLayout.xs="column" fxFlex="100" fxFlexFill>
+  <div fxFlex="33" class="sec1" fxFlex.xs="33">
+
+  </div>
+  <div fxFlex="33" class="sec2" fxFlex.xs="33">
+    <div class="Container">
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>First Name</mat-label>
+          <input matInput placeholder="Placeholder">
+          <mat-hint>Please enter your first name</mat-hint>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Last Name</mat-label>
+          <input matInput placeholder="Placeholder">
+          <mat-hint>Please enter your last name</mat-hint>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="Placeholder">
+          <mat-hint>Please enter your Username</mat-hint>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>E-Mail</mat-label>
+          <input matInput placeholder="Placeholder">
+          <mat-hint>Please enter your e-mail address</mat-hint>
+        </mat-form-field>
+      </p>
+      <p>
+        <mat-form-field appearance="standard">
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="Placeholder">
+          <mat-hint>Please enter your password</mat-hint>
+        </mat-form-field>
+      </p>
+
+
+      <button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+        {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+      </button>
+      <mat-vertical-stepper [linear]="isLinear" #stepper>
+        <mat-step [stepControl]="registerForm">
+          <form [formGroup]="registerForm">
+            <ng-template matStepLabel>Fill out your name</ng-template>
+            <mat-form-field>
+              <mat-label>Name</mat-label>
+              <input matInput placeholder="Last name, First name" formControlName="firstCtrl" required>
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="registerForm">
+          <form [formGroup]="registerForm">
+            <ng-template matStepLabel>Fill out your address</ng-template>
+            <mat-form-field>
+              <mat-label>Address</mat-label>
+              <input matInput formControlName="secondCtrl" placeholder="Ex. 1 Main St, New York, NY" required>
+            </mat-form-field>
+            <div>
+              <button mat-button matStepperPrevious>Back</button>
+              <button mat-button matStepperNext>Next</button>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step>
+          <ng-template matStepLabel>Done</ng-template>
+          <p>You are now done.</p>
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <div fxLayoutAlign=" center">
+              <button mat-raised-button (click)="stepper.reset()">Reset</button>
+            </div>
+            <div fxLayoutAlign=" center">
+              <button mat-raised-button color="primary">Senden</button>
+            </div>
+          </div>
+        </mat-step>
+      </mat-vertical-stepper>
+
+
+    </div>
+  </div>
+  <div fxFlex="33" class="sec3" fxFlex.xs="">
+
+  </div>
+</div>

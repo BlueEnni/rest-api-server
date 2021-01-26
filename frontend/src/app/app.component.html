@@ -1,4 +1,35 @@
-<p><button [routerLink]="['/']">To Home</button></p>
-<p><button [routerLink]="['/test',id]">To Home</button></p>
-<p><button [routerLink]="['/test']">To Test</button></p>
+<div class="content" fxLayout="row" fxLayoutAlign="center">
+  <mat-toolbar color="primary" fxLayout="row-reverse" fxLayoutAlign="space-between center">
+    <div>
+      <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>My App</span>
+      <button mat-icon-button class="example-icon login-icon" aria-label="Example icon-button with login icon">
+        <mat-icon>login</mat-icon>
+      </button>
+    </div>
+    <div>
+      <button mat-icon-button class="example-icon home-icon" aria-label="Example icon-button with home icon"
+        [routerLink]="['/']">
+        <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon turned_in-icon" aria-label="Example icon-button with turned_in icon"
+        [routerLink]="['/myRates']">
+        <mat-icon>turned_in</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon search-icon" aria-label="Example icon-button with search icon"
+        [routerLink]="['/search']">
+        <mat-icon>search</mat-icon>
+      </button>
+      <button mat-icon-button class="example-icon leaderboard-icon"
+        aria-label="Example icon-button with leaderboard icon" [routerLink]="['/rates']">
+        <mat-icon>leaderboard</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+</div>
+
+
+
 <router-outlet></router-outlet>
