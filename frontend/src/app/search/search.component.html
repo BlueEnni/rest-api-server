@@ -1,1 +1,36 @@
-<p>search works!</p>
+<div class="content" fxLayout="row" fxFlex="100" fxFlexFill>
+  <div fxFlex="33" class="sec1" fxFlex.xs="33">
+  </div>
+
+  <div fxFlex="33" class="sec2 container-100height" fxFlex.xs="33" fxLayoutAlign="space-around center">
+    <div fxLayoutAlign="space-around center">
+      <form [formGroup]="searchForm" (ngSubmit)="userLogin()" fxFlex="100" fxLayoutAlign="space-around"
+        fxLayout="column">
+        <div class="big-Letter" fxLayoutAlign="space-around center">
+          Search
+        </div>
+        <br>
+        <div class="example-container">
+          <mat-form-field appearance="fill" fxFlex="100">
+            <mat-label>PLZ</mat-label>
+            <input matInput type="number" class="example-right-align">
+          </mat-form-field>
+        </div>
+        <div class="example-container">
+          <mat-form-field appearance="fill" fxFlex="100">
+            <mat-label>Monatliche Strommenge</mat-label>
+            <input matInput type="number" class="example-right-align">
+            <mat-hint>{{error}}</mat-hint>
+          </mat-form-field>
+        </div>
+        <!--event wird mit () erstellt-->
+        <div fxLayoutAlign="space-around center">
+          <button mat-raised-button color="primary">Senden</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div fxFlex="33" class="sec3" fxFlex.xs="">
+
+  </div>
+</div>
