@@ -1,27 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {environment} from '../../environments/environment';
+import {HttpClient} from '@angular/common/http';
+import {Rate} from '../my-rates/my-rates.component';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import * as cookies from 'js-cookie';
 
-
-
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+interface RatesData extends Rate {
+  checked: boolean;
 }
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
 
 @Component({
   selector: 'app-rates',
@@ -30,12 +17,52 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 export class RatesComponent implements OnInit {
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['tarifName', 'plz', 'fixkosten', 'variableKosten', `controlCol`];
+  dataSource: MatTableDataSource<RatesData>;
 
-  constructor() { }
+  selecedRates: { [key: number]: Rate } = {};
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngOnInit(): void {
+
+  constructor(
+    private http: HttpClient
+  ) {
+    const prevSelected = JSON.parse(cookies.get(`myrates`)) as RatesData[];
+
+    console.log(prevSelected)
+
+    if (prevSelected) {
+      prevSelected.forEach(rate => {
+        this.selecedRates[rate.id] = rate;
+      });
+    }
+
+    console.log(this.selecedRates);
+    this.dataSource = new MatTableDataSource([]);
   }
 
+  ngOnInit(): void {
+    this.http.get<Rate[]>(`${environment.API_LOCATION}/rates`)
+      .subscribe(result => {
+        this.dataSource.data = result.map((rate): RatesData => {
+          const rateData: Partial<RatesData> = rate;
+          console.log(Object.keys(this.selecedRates).includes(rate.id.toString()))
+          rateData.checked = Object.keys(this.selecedRates).includes(rate.id.toString());
+          return rateData as RatesData;
+        });
+        this.dataSource.paginator = this.paginator;
+      }, error => console.log(error));
+  }
+
+  onRateSelected(element: Rate, set: boolean): void {
+    if (set) {
+      this.selecedRates[element.id] = element;
+    } else {
+      delete this.selecedRates[element.id];
+    }
+
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDay() + 7);
+    cookies.set(`myrates`, JSON.stringify(Object.values(this.selecedRates)), {expires: expiresAt});
+  }
 }

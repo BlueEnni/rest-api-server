@@ -1,12 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="84a5d267-e065-41e6-ac7e-f26b3c9f4028" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/uploads/private/404.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Controller/rates.js" beforeDir="false" afterPath="$PROJECT_DIR$/Controller/rates.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/database.js" beforeDir="false" afterPath="$PROJECT_DIR$/db/database.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/app.module.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/app.module.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/my-rates/my-rates.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/my-rates/my-rates.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/my-rates/my-rates.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/my-rates/my-rates.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/rates/rates.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/rates/rates.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/rates/rates.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/rates/rates.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/registration/registration.component.html" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/registration/registration.component.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/app/registration/registration.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/app/registration/registration.component.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.prod.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/environments/environment.ts" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/environments/environment.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/tslint.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/tslint.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,8 +27,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JavaScript File" />
         <option value="HTML File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -25,6 +36,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1lHGWkSkoGSC1xsH8MetrkPhGBL" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -33,7 +45,10 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="com.google.cloudcode.ide_session_index" value="20210127_0002" />
+    <property name="js.ns.project" value="true" />
+    <property name="js.ns.project.flavor" value="JavaScript" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/frontend" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -41,6 +56,7 @@
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
     <property name="ts.external.directory.path" value="$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
@@ -56,6 +72,8 @@
       <workItem from="1607272419410" duration="8516000" />
       <workItem from="1609514162402" duration="3698000" />
       <workItem from="1609595911210" duration="856000" />
+      <workItem from="1611770925439" duration="2158000" />
+      <workItem from="1611782297059" duration="795000" />
     </task>
     <servers />
   </component>
@@ -63,21 +81,30 @@
     <option name="version" value="3" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="2666" y="1122" key="FileChooserDialogImpl" timestamp="1611775403844">
+      <screen x="1920" y="840" width="1920" height="1080" />
+    </state>
+    <state x="2666" y="1122" key="FileChooserDialogImpl/1920.840.1920.1080/0.840.1920.1080/3840.0.1080.1920@1920.840.1920.1080" timestamp="1611775403844" />
     <state x="2463" y="261" width="828" height="529" key="IDE.errors.dialog" timestamp="1607272519432">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2463" y="261" width="828" height="529" key="IDE.errors.dialog/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1607272519432" />
-    <state x="2533" y="141" width="687" height="768" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1609598078511">
+    <state x="2379" y="157" key="SettingsEditor" timestamp="1611505999156">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
-    <state x="2533" y="141" width="687" height="768" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1609598078511" />
+    <state x="2379" y="157" key="SettingsEditor/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1611505999156" />
+    <state x="2533" y="141" width="687" height="768" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1611511674086">
+      <screen x="1920" y="0" width="1920" height="1080" />
+    </state>
+    <state x="2533" y="141" width="687" height="768" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1611511674086" />
     <state x="2542" y="238" key="run.anything.popup" timestamp="1609601842919">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
     <state x="2542" y="238" key="run.anything.popup/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1609601842919" />
-    <state x="2543" y="231" width="672" height="678" key="search.everywhere.popup" timestamp="1607247842369">
+    <state x="2543" y="231" width="672" height="678" key="search.everywhere.popup" timestamp="1611509264403">
       <screen x="1920" y="0" width="1920" height="1080" />
     </state>
+    <state x="2543" y="231" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1080/3840.0.1920.1080/0.0.1920.1044@1920.0.1920.1080" timestamp="1611509264403" />
     <state x="2543" y="231" width="672" height="678" key="search.everywhere.popup/1920.0.1920.1080/3840.0.1920.1080/0.8.1920.1080@1920.0.1920.1080" timestamp="1607247842369" />
   </component>
   <component name="XDebuggerManager">
@@ -85,7 +112,7 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/Controller/user.js</url>
-          <line>118</line>
+          <line>154</line>
           <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
