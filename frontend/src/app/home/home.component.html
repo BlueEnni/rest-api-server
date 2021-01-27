@@ -1,43 +1,81 @@
 <div class="content" fxLayout="row" fxFlex="100" fxFlexFill>
-  <div fxFlex="33" class="sec1" fxFlex.xs="33">
+  <div fxFlex="20" class="sec1">
   </div>
 
-  <div fxFlex="33" class="sec2 container-100height" fxFlex.xs="33" fxLayoutAlign="space-around center">
-    <div fxLayoutAlign="space-around center">
-      <form [formGroup]="loginForm" (ngSubmit)="userLogin()" fxFlex="100" fxLayoutAlign="space-around"
-        fxLayout="column">
-        <div class="big-Letter" fxLayoutAlign="space-around center">
-          Login
-        </div>
-        <br>
-        <div class="example-container">
-          <mat-form-field appearance="fill" fxFlex="100">
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username">
-          </mat-form-field>
-        </div>
-        <div class="example-container">
-          <mat-form-field appearance="fill" fxFlex="100">
-            <mat-label>Password</mat-label>
-            <input matInput formControlName="password">
-            <mat-hint>{{error}}</mat-hint>
-          </mat-form-field>
-        </div>
-        <!--event wird mit () erstellt-->
-        <div fxLayout="row" fxLayoutAlign="space-between center">
+  <div fxFlex="60" class="sec2 container-100height" fxLayoutAlign="space-around center">
+    <div fxLayout="column" fxFlex="100">
+      <mat-card-title class="big-Letter" fxLayoutAlign="center">Overview</mat-card-title>
+      <br>
+      <div>
+        <mat-card fxLayoutAlign="center" fxLayout="column">
+          <mat-card-header fxLayoutAlign="center">
+            <mat-card-title fxLayoutAlign="center">My Rates</mat-card-title>
+          </mat-card-header>
+          <mat-card-content class="" fxLayoutAlign="center">
 
-          <div fxLayoutAlign="space-between center">
-            <button mat-raised-button color="primary">Senden</button>
-          </div>
-          <div fxLayoutAlign="space-between center">
-            <button mat-raised-button [routerLink]="['/registration']">Registration</button>
-          </div>
 
-        </div>
-      </form>
+
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" fxFlex="100">
+
+              <!--- Note that these columns can be defined in any order.
+                    The actual rendered columns are set as a property on the row definition" -->
+
+              <!-- Position Column -->
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef> No. </th>
+                <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef> Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+              </ng-container>
+
+              <!-- Weight Column -->
+              <ng-container matColumnDef="weight">
+                <th mat-header-cell *matHeaderCellDef> Weight </th>
+                <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+              </ng-container>
+
+              <!-- Symbol Column -->
+              <ng-container matColumnDef="symbol">
+                <th mat-header-cell *matHeaderCellDef> Symbol </th>
+                <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+
+
+          </mat-card-content>
+        </mat-card>
+      </div>
+      <br>
+      <div>
+        <mat-card fxLayoutAlign="center" fxLayout="column">
+          <mat-card-header fxLayoutAlign="center">
+            <mat-card-title fxLayoutAlign="center">All Rates</mat-card-title>
+          </mat-card-header>
+          <button mat-raised-button color="primary" [routerLink]="['/rates']">All Rates
+          </button>
+        </mat-card>
+      </div>
+      <br>
+      <div>
+        <mat-card fxLayoutAlign="center" fxLayout="column">
+          <mat-card-header fxLayoutAlign="center">
+            <mat-card-title fxLayoutAlign="center">Login</mat-card-title>
+          </mat-card-header>
+          <button mat-raised-button color="primary" [routerLink]="['/login']">To Login
+          </button>
+        </mat-card>
+      </div>
     </div>
   </div>
-  <div fxFlex="33" class="sec3" fxFlex.xs="">
+  <div fxFlex="" class=" sec3">
 
   </div>
 </div>

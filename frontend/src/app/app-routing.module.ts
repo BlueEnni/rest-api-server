@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './login/login.component';
 import { MyRatesComponent } from './my-rates/my-rates.component';
 import { NotFoundErrorComponent } from './not-found-error/not-found-error.component';
 import { RatesComponent } from './rates/rates.component';
@@ -36,6 +37,10 @@ const routes: Routes = [{
 {
   path: 'rates',
   component: RatesComponent
+},
+{
+  path: 'login',
+  component: LoginComponent
 },
 {  
   path: '**',
