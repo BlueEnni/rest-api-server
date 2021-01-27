@@ -8,12 +8,12 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 @Component({
-  selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class SearchComponent implements OnInit {
-  public searchForm: FormGroup;
+export class LoginComponent implements OnInit {
+  public loginForm: FormGroup;
   error: string;
 
   constructor(
@@ -25,12 +25,12 @@ export class SearchComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.route.snapshot);
     //_ für private Variablen
-    this.searchForm = this._formBuilder.group({
+    this.loginForm = this._formBuilder.group({
       username: this._formBuilder.control('beschte'),
       password: this._formBuilder.control('1234'),
     })
-    this.searchForm.valueChanges.subscribe(() => {
-      console.log(this.searchForm);
+    this.loginForm.valueChanges.subscribe(() => {
+      console.log(this.loginForm);
     })
   }
  /*
@@ -39,9 +39,9 @@ export class SearchComponent implements OnInit {
     // users ist die antwort vom server
   })
   }*/
-
+  
   userLogin(){
-    const {username: username2 = '', password} = this.searchForm.value;
+    const {username: username2 = '', password} = this.loginForm.value;
     // kürzt ab :
     // username2 = this.loginForm.value.username
     // password = this.loginForm.value.password

@@ -25,6 +25,10 @@ import { SearchComponent } from './search/search.component';
 import { MyRatesComponent } from './my-rates/my-rates.component';
 import { RatesComponent } from './rates/rates.component';
 import {MatStepperModule} from '@angular/material/stepper';
+import { LoginComponent } from './login/login.component';
+import { MatCardModule } from '@angular/material/card';
+import {MatDividerModule} from '@angular/material/divider';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -35,7 +39,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     RegistrationComponent,
     SearchComponent,
     MyRatesComponent,
-    RatesComponent
+    RatesComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +55,10 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatToolbarModule,
     MatIconModule,
     MatListModule,
-    MatStepperModule
+    MatStepperModule,
+    MatCardModule,
+    MatDividerModule,
+    MatTableModule
   ],
   providers: [],
   bootstrap: [AppComponent]
