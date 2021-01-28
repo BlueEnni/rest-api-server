@@ -1,9 +1,10 @@
 //for HTTP requests etc...
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from "@angular/common/http";
 //for getting the current routing object information
 // for transmitting an validated loginform object
 import * as cookies from 'js-cookie'
+import * as moment from 'moment';
 
 export interface PeriodicElement {
   name: string;
@@ -21,37 +22,65 @@ export interface Rate {
   variableKosten: number;
 }
 
-export interface RateWithCheck extends Rate{
+export interface RateWithCheck extends Rate {
   check: boolean;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H', check: false},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne', check: true},
-];
+interface RatesData extends Rate {
+  checked: boolean;
+}
 
 
 @Component({
   selector: 'app-my-rates',
   templateUrl: './my-rates.component.html',
-  styleUrls: ['./my-rates.component.css']
+  styleUrls: [ './my-rates.component.css' ]
 })
 
 export class MyRatesComponent implements OnInit {
-  displayedColumns: string[] = ['tarifName', 'plz'];
+  displayedColumns: string[] = [ 'tarifName', 'plz', 'check' ];
   dataSource: RateWithCheck[] = [];
   rates: Rate[] = [];
 
+  selecedRates: { [ key: number ]: Rate } = {};
 
   constructor(
   ) {
+    const myrates = cookies.get(`myrates`);
+    if (myrates) {
+      const prevSelected = JSON.parse(myrates) as RatesData[];
+
+      console.log(prevSelected)
+
+      if (prevSelected) {
+        prevSelected.forEach(rate => {
+          this.selecedRates[ rate.id ] = rate;
+        });
+      }
+    }
   }
 
   ngOnInit(): void {
-    this.dataSource = JSON.parse(cookies.get('myrates')) as RateWithCheck[];
+    const myrates = cookies.get('myrates');
+    if (myrates) {
+      this.dataSource = JSON.parse(myrates) as RateWithCheck[];
+    }
   }
 
   checkAll(status: boolean): void {
     this.dataSource.map(item => item.check = status);
+  }
+
+  onRateSelected(element: Rate, set: boolean): void {
+    if (set) {
+      delete this.selecedRates[ element.id ];
+    }
+    const expiresAt = moment().add('day', 7).toDate();
+    cookies.set(`myrates`, JSON.stringify(Object.values(this.selecedRates)), { expires: expiresAt });
+    this.dataSource = Object.values(this.selecedRates) as RateWithCheck[];
+  }
+  onRateSelectedDeleteAll(): void {
+    cookies.remove(`myrates`);
+    this.dataSource = [];
   }
 }
