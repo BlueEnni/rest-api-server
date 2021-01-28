@@ -1,10 +1,11 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {environment} from '../../environments/environment';
-import {HttpClient} from '@angular/common/http';
-import {Rate} from '../my-rates/my-rates.component';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatTableDataSource} from '@angular/material/table';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Rate } from '../my-rates/my-rates.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import * as cookies from 'js-cookie';
+import * as moment from 'moment';
 
 interface RatesData extends Rate {
   checked: boolean;
@@ -13,31 +14,34 @@ interface RatesData extends Rate {
 @Component({
   selector: 'app-rates',
   templateUrl: './rates.component.html',
-  styleUrls: ['./rates.component.css']
+  styleUrls: [ './rates.component.css' ]
 })
 export class RatesComponent implements OnInit {
 
-  displayedColumns: string[] = ['tarifName', 'plz', 'fixkosten', 'variableKosten', `controlCol`];
+  displayedColumns: string[] = [ 'tarifName', 'plz', 'fixkosten', 'variableKosten', `controlCol` ];
   dataSource: MatTableDataSource<RatesData>;
 
-  selecedRates: { [key: number]: Rate } = {};
+  selecedRates: { [ key: number ]: Rate } = {};
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
 
   constructor(
     private http: HttpClient
   ) {
-    const prevSelected = JSON.parse(cookies.get(`myrates`)) as RatesData[];
+    const myrates = cookies.get(`myrates`);
+    if (myrates) {
+      const prevSelected = JSON.parse(myrates) as RatesData[];
 
-    console.log(prevSelected)
+      console.log(prevSelected)
 
-    if (prevSelected) {
-      prevSelected.forEach(rate => {
-        this.selecedRates[rate.id] = rate;
-      });
+      if (prevSelected) {
+        prevSelected.forEach(rate => {
+          this.selecedRates[ rate.id ] = rate;
+        });
+      }
     }
-
     console.log(this.selecedRates);
+
     this.dataSource = new MatTableDataSource([]);
   }
 
@@ -56,13 +60,14 @@ export class RatesComponent implements OnInit {
 
   onRateSelected(element: Rate, set: boolean): void {
     if (set) {
-      this.selecedRates[element.id] = element;
+      this.selecedRates[ element.id ] = element;
     } else {
-      delete this.selecedRates[element.id];
+      delete this.selecedRates[ element.id ];
     }
 
-    const expiresAt = new Date();
-    expiresAt.setDate(expiresAt.getDay() + 7);
-    cookies.set(`myrates`, JSON.stringify(Object.values(this.selecedRates)), {expires: expiresAt});
+    const expiresAt = moment().add('day', 7).toDate();
+    console.log(expiresAt);
+    cookies.set(`myrates`, JSON.stringify(Object.values(this.selecedRates)), { expires: expiresAt });
+
   }
 }

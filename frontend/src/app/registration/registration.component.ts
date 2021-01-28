@@ -14,7 +14,7 @@ export class RegistrationComponent implements OnInit {
 
   public isLinear = false;
   public registerForm: FormGroup;
-  private isSubmitting = false;
+  public isSubmitting = false;
 
   constructor(
     private _formBuilder: FormBuilder,

@@ -2,11 +2,14 @@
 	<div class="sec1" fxFlex="20">
 	</div>
 
-	<div class="sec2 container-100height" fxFlex="60" fxLayoutAlign="space-around center">
+	<div class="" fxFlex="60" fxLayoutAlign="space-around center">
 		<div fxFlex="100" fxLayout="column">
-			<mat-card-title class="big-Letter" fxLayoutAlign="center">Overview</mat-card-title>
+			<h1 fxLayoutAlign="center">
+				Overview
+			</h1>
+
 			<br>
-			<div>
+			<div fxLayout="column">
 				<mat-card fxLayout="column" fxLayoutAlign="center">
 					<mat-card-header fxLayoutAlign="center">
 						<mat-card-title fxLayoutAlign="center">All Rates</mat-card-title>
@@ -19,27 +22,27 @@
 							<!--- Note that these columns can be defined in any order.
 										The actual rendered columns are set as a property on the row definition" -->
 
-							<!-- Position Column -->
+							<!-- Name Column -->
 							<ng-container matColumnDef="tarifName">
 								<th *matHeaderCellDef mat-header-cell> Name</th>
 								<td *matCellDef="let element" mat-cell> {{element.tarifName}} </td>
 							</ng-container>
 
-							<!-- Name Column -->
+							<!-- PLZ Column -->
 							<ng-container matColumnDef="plz">
 								<th *matHeaderCellDef mat-header-cell>PLZ</th>
 								<td *matCellDef="let element" mat-cell> {{element.plz}} </td>
 							</ng-container>
 
-							<!-- Weight Column -->
+							<!-- Fixkosten Column -->
 							<ng-container matColumnDef="fixkosten">
 								<th *matHeaderCellDef mat-header-cell>Fixkosten</th>
 								<td *matCellDef="let element" mat-cell> {{element.fixkosten}} </td>
 							</ng-container>
 
-							<!-- Symbol Column -->
+							<!-- Variable Kosten Column -->
 							<ng-container matColumnDef="variableKosten">
-								<th *matHeaderCellDef mat-header-cell>Variablen Kosten</th>
+								<th *matHeaderCellDef mat-header-cell>Variable Kosten</th>
 								<td *matCellDef="let element" mat-cell> {{element.variableKosten}} </td>
 							</ng-container>
 
@@ -48,18 +51,21 @@
 							<!-- Symbol Column -->
 							<ng-container matColumnDef="controlCol">
 								<th *matHeaderCellDef mat-header-cell>Variablen Kosten</th>
-								<td *matCellDef="let element" mat-cell> <mat-checkbox [checked]="element.checked" (change)="onRateSelected(element, $event.checked)"></mat-checkbox> </td>
+								<td *matCellDef="let element" mat-cell>
+									<mat-checkbox [checked]="element.checked" (change)="onRateSelected(element, $event.checked)">
+									</mat-checkbox>
+								</td>
 							</ng-container>
 
 							<tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
 							<tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
 						</table>
-						<mat-paginator
-							[pageSizeOptions]="[5, 10, 25, 100]"
-							[pageSize]="10">
-						</mat-paginator>
 					</mat-card-content>
+					<mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="10">
+					</mat-paginator>
 				</mat-card>
+				<button mat-raised-button color="primary" [routerLink]="['/search']">Back to Search</button>
+
 			</div>
 			<br>
 		</div>

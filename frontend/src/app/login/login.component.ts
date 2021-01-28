@@ -6,11 +6,13 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 //for transmitting an validated loginform object
 import { FormBuilder, FormGroup } from '@angular/forms';
+import * as cookies from 'js-cookie';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: [ './login.component.css' ]
 })
 export class LoginComponent implements OnInit {
   public loginForm: FormGroup;
@@ -19,8 +21,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private _formBuilder: FormBuilder,
-    private http: HttpClient
-  ){}
+    private http: HttpClient,
+    private _snackBar: MatSnackBar
+  ) { }
 
   ngOnInit(): void {
     console.log(this.route.snapshot);
@@ -30,18 +33,17 @@ export class LoginComponent implements OnInit {
       password: this._formBuilder.control('1234'),
     })
     this.loginForm.valueChanges.subscribe(() => {
-      console.log(this.loginForm);
     })
   }
- /*
-  getAll(){
-    this.httpClient.get('http://localhost:3000/').subscribe( users => {
-    // users ist die antwort vom server
-  })
-  }*/
-  
-  userLogin(){
-    const {username: username2 = '', password} = this.loginForm.value;
+  /*
+   getAll(){
+     this.httpClient.get('http://localhost:3000/').subscribe( users => {
+     // users ist die antwort vom server
+   })
+   }*/
+
+  userLogin() {
+    const { username: username2 = '', password } = this.loginForm.value;
     // kürzt ab :
     // username2 = this.loginForm.value.username
     // password = this.loginForm.value.password
@@ -53,11 +55,12 @@ export class LoginComponent implements OnInit {
     }
     // body.username = username2;
     this.http.post('http://localhost:3000/login', body).subscribe(res => {
-        // res ist die server response
-        // die and .subscribe funktion übergebende funktion läuft wenn der resquest beendet ist
+      // res ist die server response
+      // die and .subscribe funktion übergebende funktion läuft wenn der resquest beendet ist
+      cookies.set('token', res as string);
+      this._snackBar.open(`Login erfolgreich!`, `close`, { duration: 4000 });
+      console.log(res);
 
-        console.log(res);
-      
     }, (err) => {
       // browser alert - popupfenster
       this.error = err.error;

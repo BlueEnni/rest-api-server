@@ -1,13 +1,14 @@
 <div class="content" fxLayout="row" fxFlex="100" fxFlexFill>
-  <div fxFlex="33" class="sec1" fxFlex.xs="33">
+  <div fxFlex="20" class="sec1">
   </div>
 
-  <div fxFlex="33" class="sec2 container-100height" fxFlex.xs="33" fxLayoutAlign="space-around center">
-    <div fxLayoutAlign="space-around center">
-      <form [formGroup]="searchForm" (ngSubmit)="userLogin()" fxFlex="100" fxLayoutAlign="space-around"
-        fxLayout="column">
-        <div class="big-Letter" fxLayoutAlign="space-around center">
-          Search
+  <div fxFlex="60" class="sec2" fxLayoutAlign="space-around center" fxLayout="column">
+    <div fxLayoutAlign="space-around center" fxLayout="column" fxFlex="100">
+      <form [formGroup]="searchForm" (ngSubmit)="userLogin()" fxFlex="100" fxLayoutAlign="center" fxLayout="column">
+        <div class="" fxLayoutAlign="center">
+          <h1 fxLayoutAlign="center">
+            Search
+          </h1>
         </div>
         <br>
         <div class="example-container">
@@ -28,9 +29,10 @@
           <button mat-raised-button color="primary">Senden</button>
         </div>
       </form>
+      <br>
     </div>
   </div>
-  <div fxFlex="33" class="sec3" fxFlex.xs="">
+  <div fxFlex="20" class="sec3">
 
   </div>
 </div>
