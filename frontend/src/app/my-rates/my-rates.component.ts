@@ -1,19 +1,27 @@
 //for HTTP requests etc...
-import { Component, OnInit, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from "@angular/common/http";
 //for getting the current routing object information
-import { ActivatedRoute } from '@angular/router';
-//for transmitting an validated loginform object
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { element } from 'protractor';
-import { EMLINK } from 'constants';
-
+// for transmitting an validated loginform object
+import * as cookies from 'js-cookie'
 
 export interface PeriodicElement {
   name: string;
   position: number;
   weight: number;
   symbol: string;
+  check: boolean;
+}
+
+export interface Rate {
+  id: number;
+  tarifName: string;
+  plz: string;
+  fixkosten: number;
+  variableKosten: number;
+}
+
+export interface RateWithCheck extends Rate{
   check: boolean;
 }
 
@@ -28,21 +36,22 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './my-rates.component.html',
   styleUrls: ['./my-rates.component.css']
 })
+
 export class MyRatesComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol','check'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['tarifName', 'plz'];
+  dataSource: RateWithCheck[] = [];
+  rates: Rate[] = [];
 
 
-  constructor() { }
+  constructor(
+  ) {
+  }
 
   ngOnInit(): void {
+    this.dataSource = JSON.parse(cookies.get('myrates')) as RateWithCheck[];
   }
 
-  checkAll(status: boolean){
-    this.dataSource.map(element => {
-      element.check = status;
-      return element;
-    })
+  checkAll(status: boolean): void {
+    this.dataSource.map(item => item.check = status);
   }
-
 }

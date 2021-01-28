@@ -10,6 +10,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
+
 //html components via sudo ng g c <name>
 import { HomeComponent } from './home/home.component';
 import { TestComponent } from './test/test.component';
@@ -30,6 +32,7 @@ import { MatCardModule } from '@angular/material/card';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
@@ -60,7 +63,9 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     MatCardModule,
     MatDividerModule,
     MatTableModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatPaginatorModule,
+    MatSnackBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
