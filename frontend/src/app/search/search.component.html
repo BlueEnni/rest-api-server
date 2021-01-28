@@ -3,8 +3,8 @@
   </div>
 
   <div fxFlex="60" class="sec2" fxLayoutAlign="space-around center" fxLayout="column">
-    <div fxLayoutAlign="space-around center" fxLayout="column" fxFlex="100">
-      <form [formGroup]="searchForm" (ngSubmit)="userLogin()" fxFlex="100" fxLayoutAlign="center" fxLayout="column">
+    <div fxLayoutAlign="space-around center" fxLayout="column" fxFlex="100" [formGroup]="searchForm">
+      <form [formGroup]="searchForm" (ngSubmit)="onSearch()" fxFlex="100" fxLayoutAlign="center" fxLayout="column" >
         <div class="" fxLayoutAlign="center">
           <h1 fxLayoutAlign="center">
             Search
@@ -14,13 +14,13 @@
         <div class="example-container">
           <mat-form-field appearance="fill" fxFlex="100">
             <mat-label>PLZ</mat-label>
-            <input matInput type="number" class="example-right-align">
+            <input formControlName="plz" matInput type="number" class="example-right-align">
           </mat-form-field>
         </div>
         <div class="example-container">
           <mat-form-field appearance="fill" fxFlex="100">
             <mat-label>Monatliche Strommenge</mat-label>
-            <input matInput type="number" class="example-right-align">
+            <input formControlName="mnt" matInput type="number" class="example-right-align">
             <mat-hint>{{error}}</mat-hint>
           </mat-form-field>
         </div>
