@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
 //for HTTP requests etc...
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 //for getting the current routing object information
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 //for transmitting an validated loginform object
-import { FormBuilder, FormGroup } from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+
+export type searchInput = { plz: number, mnt: number };
 
 @Component({
   selector: 'app-search',
@@ -18,51 +19,38 @@ export class SearchComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private _formBuilder: FormBuilder,
     private http: HttpClient
-  ){}
+  ) {
+  }
 
   ngOnInit(): void {
     console.log(this.route.snapshot);
     //_ für private Variablen
     this.searchForm = this._formBuilder.group({
-      username: this._formBuilder.control('beschte'),
-      password: this._formBuilder.control('1234'),
-    })
+      plz: new FormControl(``),
+      mnt: new FormControl(``)
+    });
     this.searchForm.valueChanges.subscribe(() => {
       console.log(this.searchForm);
-    })
+    });
   }
- /*
-  getAll(){
-    this.httpClient.get('http://localhost:3000/').subscribe( users => {
-    // users ist die antwort vom server
-  })
-  }*/
 
-  userLogin(){
-    const {username: username2 = '', password} = this.searchForm.value;
-    // kürzt ab :
-    // username2 = this.loginForm.value.username
-    // password = this.loginForm.value.password
-    // const [test1,test2] = [1,2,3];
-    // console.log({username2, password, test1, test2});
-    const body = {
-      username: username2,
-      password
+  onSearch(): void {
+    const {plz, mnt} = this.searchForm.value as searchInput;
+
+    const queryParams: Partial<searchInput> = {};
+
+    if (plz) {
+      queryParams.plz = plz;
     }
-    // body.username = username2;
-    this.http.post('http://localhost:3000/login', body).subscribe(res => {
-        // res ist die server response
-        // die and .subscribe funktion übergebende funktion läuft wenn der resquest beendet ist
 
-        console.log(res);
-      
-    }, (err) => {
-      // browser alert - popupfenster
-      this.error = err.error;
-      alert(err.error);
-    })
+    if (mnt) {
+      queryParams.mnt = mnt;
+    }
+
+    this.router.navigate(['/rates'], {queryParamsHandling: 'merge', queryParams})
+      .catch(err => console.log(err));
   }
-
 }

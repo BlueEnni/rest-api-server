@@ -33,6 +33,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginatorModule } from "@angular/material/paginator";
+import {MatChipsModule} from '@angular/material/chips';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     MatTableModule,
     MatCheckboxModule,
     MatPaginatorModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatChipsModule
   ],
   providers: [],
   bootstrap: [ AppComponent ]

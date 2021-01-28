@@ -14,6 +14,13 @@
 					<mat-card-header fxLayoutAlign="center">
 						<mat-card-title fxLayoutAlign="center">All Rates</mat-card-title>
 					</mat-card-header>
+					<mat-card-subtitle>
+						<mat-chip-list aria-label="Fish selection">
+							<mat-chip (removed)="onRemovePlz()" *ngIf="plz">plz: {{plz}}
+								<mat-icon matChipRemove>cancel</mat-icon>
+							</mat-chip>
+						</mat-chip-list>
+					</mat-card-subtitle>
 					<mat-card-content class="" fxLayoutAlign="center">
 
 
@@ -46,8 +53,6 @@
 								<td *matCellDef="let element" mat-cell> {{element.variableKosten}} </td>
 							</ng-container>
 
-
-
 							<!-- Symbol Column -->
 							<ng-container matColumnDef="controlCol">
 								<th *matHeaderCellDef mat-header-cell>Variablen Kosten</th>
@@ -55,6 +60,13 @@
 									<mat-checkbox [checked]="element.checked" (change)="onRateSelected(element, $event.checked)">
 									</mat-checkbox>
 								</td>
+							</ng-container>
+
+
+							<!-- Variable Kosten Column -->
+							<ng-container matColumnDef="mnt">
+								<th *matHeaderCellDef mat-header-cell>gsmt</th>
+								<td *matCellDef="let element" mat-cell> {{element.gsmtPrice}} </td>
 							</ng-container>
 
 							<tr *matHeaderRowDef="displayedColumns" mat-header-row></tr>
