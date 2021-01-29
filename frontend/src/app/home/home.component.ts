@@ -5,44 +5,57 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 //for transmitting an validated loginform object
 import { FormBuilder, FormGroup } from '@angular/forms';
+import * as cookies from 'js-cookie'
+import * as moment from 'moment';
 
-
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
+export interface Rate {
+  id: number;
+  tarifName: string;
+  plz: string;
+  fixkosten: number;
+  variableKosten: number;
 }
 
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-];
+export interface RateWithCheck extends Rate {
+  check: boolean;
+}
 
+interface RatesData extends Rate {
+  checked: boolean;
+}
 
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: [ './home.component.css' ]
 })
 export class HomeComponent implements OnInit {
+  displayedColumns: string[] = [ 'tarifName', 'plz' ];
+  dataSource: RateWithCheck[] = [];
+  rates: Rate[] = [];
 
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = ELEMENT_DATA;
- 
-  constructor() { }
+  selecedRates: { [ key: number ]: Rate } = {};
 
-  ngOnInit(){
-    
+  constructor() {
+    const myrates = cookies.get(`myrates`);
+    if (myrates) {
+      const prevSelected = JSON.parse(myrates) as RatesData[];
+
+      console.log(prevSelected)
+
+      if (prevSelected) {
+        prevSelected.forEach(rate => {
+          this.selecedRates[ rate.id ] = rate;
+        });
+      }
+    }
+  }
+
+  ngOnInit() {
+    const myrates = cookies.get('myrates');
+    if (myrates) {
+      this.dataSource = JSON.parse(myrates) as RateWithCheck[];
+    }
   }
 }

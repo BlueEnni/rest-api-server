@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import * as cookies from 'js-cookie';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-root',
@@ -12,5 +13,11 @@ export class AppComponent {
   logout(): void {
     cookies.remove(`myrates`);
     cookies.remove(`token`);
+    this._snackBar.open(`Logout erfolgreich!`, `close`, { duration: 4000 });
   }
+
+
+  constructor(
+    private _snackBar: MatSnackBar
+  ) { }
 }

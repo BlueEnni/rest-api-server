@@ -1,14 +1,14 @@
-import {Component, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HttpClient} from "@angular/common/http";
-import {environment} from "../../environments/environment";
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from "@angular/router";
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from "@angular/common/http";
+import { environment } from "../../environments/environment";
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from "@angular/router";
 
 @Component({
   selector: 'app-registration',
   templateUrl: './registration.component.html',
-  styleUrls: ['./registration.component.css']
+  styleUrls: [ './registration.component.css' ]
 })
 export class RegistrationComponent implements OnInit {
 
@@ -27,8 +27,8 @@ export class RegistrationComponent implements OnInit {
   ngOnInit(): void {
 
     this.registerForm = this._formBuilder.group({
-      firstCtrl: ['', Validators.required],
-      secondCtrl: ['', Validators.required],
+      firstCtrl: [ '', Validators.required ],
+      secondCtrl: [ '', Validators.required ],
       firstName: this._formBuilder.control(''),
       lastName: this._formBuilder.control(''),
       username: this._formBuilder.control(''),
@@ -42,7 +42,7 @@ export class RegistrationComponent implements OnInit {
 
   onSubmitRegistration(): void {
     this.isSubmitting = true;
-    const {firstName, lastName, username, email, password} = this.registerForm.value;
+    const { firstName, lastName, username, email, password } = this.registerForm.value;
     const body = {
       firstName,
       lastName,
@@ -53,11 +53,12 @@ export class RegistrationComponent implements OnInit {
 
     this.http.post(`${environment.API_LOCATION}/signup`, body).subscribe(() => {
       console.log(`success`);
-      this._snackBar.open(`Registrierung erfolgreich!`, `close`, {duration: 2000});
-      this.router.navigate([`/login`]).catch();
+      this._snackBar.open(`Registrierung erfolgreich!`, `close`, { duration: 4000 });
+      this.router.navigate([ `/login` ]).catch();
     }, error => {
       console.log(error);
       this.isSubmitting = false;
+      this._snackBar.open(`Registrierung fehlgeschlagen!`, `close`, { duration: 4000 });
     });
   }
 }

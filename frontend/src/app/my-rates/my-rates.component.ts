@@ -6,13 +6,6 @@ import { HttpClient } from "@angular/common/http";
 import * as cookies from 'js-cookie'
 import * as moment from 'moment';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-  check: boolean;
-}
 
 export interface Rate {
   id: number;
