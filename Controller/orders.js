@@ -1,4 +1,4 @@
-const db = require( "../db/database" )
+const db = require("../db/database")
 
 
 /**
@@ -8,15 +8,15 @@ const db = require( "../db/database" )
  * @param {e.NextFunction} next
  * @return {any}
  */
-exports.postOrder = async ( req, res, next ) => {
+exports.postOrder = async (req, res, next) => {
 	const { rateId, consumption, street, streetNumber, zipCode, city } = req.body;
 	try {
 
-		if (isNaN( Number( rateId ) ) || isNaN( Number( consumption ) ) || !street || !streetNumber || !zipCode) return res.sendStatus( 400 );
+		if (isNaN(Number(rateId)) || isNaN(Number(consumption)) || !street || !streetNumber || !zipCode) return res.sendStatus(400);
 
 		const connection = await db.getConnection()
 
-		const addressResult = await connection.query( `
+		const addressResult = await connection.query(`
 		INSERT INTO addresses
 		(
 			street
@@ -28,12 +28,12 @@ exports.postOrder = async ( req, res, next ) => {
 		VALUES (
 			?,?,?,?,?
 		)`,
-			[street, streetNumber, zipCode, city, null] // @todo repalce null with userId once authentication is added
+			[ street, streetNumber, zipCode, city, null ] // @todo repalce null with userId once authentication is added
 		);
 
 		const addressId = addressResult.insertId;
 
-		const orderResult = await db.query( `
+		const orderResult = await db.query(`
 		INSERT INTO orders
 		(
 			userId
@@ -46,14 +46,14 @@ exports.postOrder = async ( req, res, next ) => {
 			rateId,
 			addressId,
 			consumption
-		] )
+		])
 
 		connection.release()
 
-		res.status( 201 ).json( orderResult.insertId );
+		res.status(201).json(orderResult.insertId);
 
 	} catch (e) {
-		next( e );
+		next(e);
 	}
 }
 
@@ -64,16 +64,16 @@ exports.postOrder = async ( req, res, next ) => {
  * @param {e.NextFunction} next
  * @return {any}
  */
-exports.getAllOrders = async ( req, res, next ) => {
+exports.getAllOrders = async (req, res, next) => {
 	try {
-		const orders = await db.query( `
+		const orders = await db.query(`
 		SELECT *
 		FROM orders
 		` )
 
-		res.json( orders );
+		res.json(orders);
 	} catch (e) {
-		next( e );
+		next(e);
 	}
 }
 
@@ -85,13 +85,13 @@ exports.getAllOrders = async ( req, res, next ) => {
  * @param {e.NextFunction} next
  * @return {any}
  */
-exports.getOrderDetails = async ( req, res, next ) => {
+exports.getOrderDetails = async (req, res, next) => {
 	const orderId = req.params.orderId;
 
 	try {
-		if (isNaN( Number( orderId ) )) return res.sendStatus( 400 );
+		if (isNaN(Number(orderId))) return res.sendStatus(400);
 
-		const orders = await db.query( `
+		const orders = await db.query(`
 		SELECT *
 		FROM orders
 		WHERE id = ?`
@@ -99,12 +99,12 @@ exports.getOrderDetails = async ( req, res, next ) => {
 		);
 		const order = orders.pop();
 
-		if (!order) return res.sendStatus( 404 );
+		if (!order) return res.sendStatus(404);
 
-		res.json( order );
+		res.json(order);
 
 	} catch (e) {
-		next( e );
+		next(e);
 	}
 }
 
@@ -116,12 +116,12 @@ exports.getOrderDetails = async ( req, res, next ) => {
  * @param {e.NextFunction} next
  * @return {any}
  */
-exports.patchOrder = async ( req, res, next ) => {
+exports.patchOrder = async (req, res, next) => {
 	const orderId = req.params.orderId;
 	const { consumption: consumptionBody } = req.body
-	console.log( req.body )
+	console.log(req.body)
 	try {
-		const orders = await db.query( `
+		const orders = await db.query(`
 			SELECT *
 			FROM orders
 			WHERE id = ?`, orderId
@@ -129,7 +129,7 @@ exports.patchOrder = async ( req, res, next ) => {
 
 		const order = orders.pop()
 
-		if (!order) return res.sendStatus( 404 );
+		if (!order) return res.sendStatus(404);
 
 		let { consumption } = order;
 
@@ -137,16 +137,16 @@ exports.patchOrder = async ( req, res, next ) => {
 			consumption = consumptionBody;
 		}
 
-		await db.query( `
+		await db.query(`
 			UPDATE orders
 			SET consumption = ?
 			WHERE id = ?
-		`, [consumption, orderId] );
+		`, [ consumption, orderId ]);
 
 
-		res.sendStatus( 200 );
+		res.sendStatus(200);
 	} catch (e) {
-		next( e )
+		next(e)
 	}
 }
 
@@ -158,20 +158,20 @@ exports.patchOrder = async ( req, res, next ) => {
  * @param {e.NextFunction} next
  * @return {any}
  */
-exports.deleteOrder = async ( req, res, next ) => {
+exports.deleteOrder = async (req, res, next) => {
 	const { orderId } = req.params;
 
 	try {
 
-		const orderResult = await db.query( `
+		const orderResult = await db.query(`
 		UPDATE orders
 		SET deletedAt = ?
-		WHERE id = ?`, [new Date(), orderId] );
+		WHERE id = ?`, [ new Date(), orderId ]);
 
-		if (orderResult.affectedRows === 0) return res.sendStatus( 404 );
+		if (orderResult.affectedRows === 0) return res.sendStatus(404);
 
-		res.status( 200 ).json( orderId );
+		res.status(200).json(orderId);
 	} catch (e) {
-		next( e );
+		next(e);
 	}
 }

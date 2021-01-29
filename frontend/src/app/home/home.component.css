@@ -6,22 +6,22 @@
 }
 
 .example-button-row {
-  
+
   display: table-cell;
   width: 490px;
 }
 
-.container-100height{
+.container-100height {
   height: calc(100vh - 64px);
 }
 
-.big-Letter{
+.big-Letter {
   font-size: xxx-large;
   font-weight: bold;
   margin-bottom: 50px;
 }
 
-.grey-background{
+.grey-background {
   color: rgb(90, 90, 90);
   background-color: rgb(241, 241, 241);
   margin-top: 8px;
