@@ -53,19 +53,19 @@
 								<td *matCellDef="let element" mat-cell> {{element.variableKosten}} </td>
 							</ng-container>
 
-							<!-- Symbol Column -->
+							<!-- Add Column -->
 							<ng-container matColumnDef="controlCol">
-								<th *matHeaderCellDef mat-header-cell>Variablen Kosten</th>
+								<th *matHeaderCellDef mat-header-cell>Tarif hinzufügen</th>
 								<td *matCellDef="let element" mat-cell>
-									<mat-checkbox [checked]="element.checked" (change)="onRateSelected(element, $event.checked)">
+									<mat-checkbox [checked]="element.checked" (change)="onRateSelected(element, $event.checked)"
+										color="primary">
 									</mat-checkbox>
 								</td>
 							</ng-container>
 
-
 							<!-- Variable Kosten Column -->
 							<ng-container matColumnDef="mnt">
-								<th *matHeaderCellDef mat-header-cell>gsmt</th>
+								<th *matHeaderCellDef mat-header-cell>Gesamt Kosten</th>
 								<td *matCellDef="let element" mat-cell> {{element.gsmtPrice}} </td>
 							</ng-container>
 

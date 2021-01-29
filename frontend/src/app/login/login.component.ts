@@ -29,8 +29,8 @@ export class LoginComponent implements OnInit {
     console.log(this.route.snapshot);
     //_ für private Variablen
     this.loginForm = this._formBuilder.group({
-      username: this._formBuilder.control('beschte'),
-      password: this._formBuilder.control('1234'),
+      username: this._formBuilder.control(''),
+      password: this._formBuilder.control(''),
     })
     this.loginForm.valueChanges.subscribe(() => {
     })
@@ -65,6 +65,7 @@ export class LoginComponent implements OnInit {
       // browser alert - popupfenster
       this.error = err.error;
       alert(err.error);
+      this._snackBar.open(`Login fehlgeschlagen!`, `close`, { duration: 4000 });
     })
   }
 
