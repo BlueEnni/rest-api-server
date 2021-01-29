@@ -56,7 +56,7 @@ app.delete("/orders/:orderId", orders.deleteOrder)
 app.post("/ratesupload", storage.single('csv'), rates.importcsv);
 
 
-app.all('/?*', (req,res ,next) => {
+app.all('/?*', (req, res, next) => {
     res.sendFile(path.join(__dirname, "uploads", "private", "404.html"))
 })
 

@@ -9,7 +9,7 @@ import { RegistrationComponent } from './registration/registration.component';
 import { SearchComponent } from './search/search.component';
 import { TestComponent } from './test/test.component';
 
-const routes: Routes = [{
+const routes: Routes = [ {
   path: '',
   pathMatch: 'full',
   component: HomeComponent
@@ -42,13 +42,13 @@ const routes: Routes = [{
   path: 'login',
   component: LoginComponent
 },
-{  
+{
   path: '**',
   component: NotFoundErrorComponent
-}];
+} ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [ RouterModule.forRoot(routes) ],
+  exports: [ RouterModule ]
 })
 export class AppRoutingModule { }

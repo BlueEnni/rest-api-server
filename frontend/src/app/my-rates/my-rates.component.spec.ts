@@ -10,7 +10,7 @@ describe('MyRatesComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ MyRatesComponent ]
     })
-    .compileComponents();
+      .compileComponents();
   });
 
   beforeEach(() => {

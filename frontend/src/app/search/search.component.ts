@@ -1,17 +1,17 @@
 //for HTTP requests etc...
-import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 //for getting the current routing object information
-import {ActivatedRoute, Router} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 //for transmitting an validated loginform object
-import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
 export type searchInput = { plz: number, mnt: number };
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
-  styleUrls: ['./search.component.css']
+  styleUrls: [ './search.component.css' ]
 })
 export class SearchComponent implements OnInit {
   public searchForm: FormGroup;
@@ -38,7 +38,7 @@ export class SearchComponent implements OnInit {
   }
 
   onSearch(): void {
-    const {plz, mnt} = this.searchForm.value as searchInput;
+    const { plz, mnt } = this.searchForm.value as searchInput;
 
     const queryParams: Partial<searchInput> = {};
 
@@ -50,7 +50,7 @@ export class SearchComponent implements OnInit {
       queryParams.mnt = mnt;
     }
 
-    this.router.navigate(['/rates'], {queryParamsHandling: 'merge', queryParams})
+    this.router.navigate([ '/rates' ], { queryParamsHandling: 'merge', queryParams })
       .catch(err => console.log(err));
   }
 }
