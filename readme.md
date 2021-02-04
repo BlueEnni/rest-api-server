@@ -153,12 +153,12 @@
 	
 6. request a specific rate:
     - ***get*** request to:
-	http://localhost:3000/rates/:rateId
+	http://localhost:3000/rates/:id
 
 
 7. change a specific rate:
     - ***patch*** request to:
-	http://localhost:3000/rates/:rateId
+	http://localhost:3000/rates/:id
     ```
       body: raw/json
       {
@@ -172,7 +172,7 @@
 
 8. delete a specific rate:
     - ***delete*** request to:
-	http://localhost:3000/rates/:rateId
+	http://localhost:3000/rates/:id
 
 
 9. request all users:

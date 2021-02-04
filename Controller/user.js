@@ -90,7 +90,7 @@ exports.patchUser = async (req, res, next) => {
         UPDATE users
         SET firstName = ?, lastName = ?, username = ?, email = ?, password = ?
         WHERE id = ?;
-        `, [ user.firstName, user.lastName, user.username, user.email, user.password, req.params.id ]
+        `, [ user.firstName, user.lastName, user.username, user.email, user.password, userId ]
         );
 
         res.status(200).send("Userdaten wurden geändert!")

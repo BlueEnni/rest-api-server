@@ -67,8 +67,9 @@ exports.postOrder = async (req, res, next) => {
 exports.getAllOrders = async (req, res, next) => {
 	try {
 		const orders = await db.query(`
-		SELECT *
+		SELECT id, userId, rateId, addressId, consumption
 		FROM orders
+		WHERE deletedAt IS null
 		` )
 
 		res.json(orders);
@@ -92,10 +93,11 @@ exports.getOrderDetails = async (req, res, next) => {
 		if (isNaN(Number(orderId))) return res.sendStatus(400);
 
 		const orders = await db.query(`
-		SELECT *
+		SELECT id, userId, rateId, addressId, consumption
 		FROM orders
-		WHERE id = ?`
-			, orderId
+		WHERE id = ?
+		AND deletedAt IS null
+		`	, orderId
 		);
 		const order = orders.pop();
 
