@@ -1,6 +1,6 @@
 # Webprogramming project DHBW Heidenheim
 
-## Installation manual:
+## Installation manual (Ubuntu):
 
 1. Install a mariadb server on your system. After that create a database called mariadb.
   
@@ -24,7 +24,9 @@
   **Linux:**
   
   ```
-    sudo wget https://github.com/BlueEnni/rest-api-server/archive/1.2.zip; mkdir Code; mv ./rest-api-server-1.2.zip ./Code/; cd Code/; unzip rest-api-server-1.2.zip
+    sudo wget https://github.com/BlueEnni/rest-api-server/archive/1.4.zip;
+    
+    mkdir Code; mv ./1.4.zip ./Code/; cd Code/; unzip 1.4.zip
   ```
 
 3. Now go into the code folder until you are on the same root level as the app.js file is and use 'npm install' to get all required dependencies:
@@ -32,7 +34,7 @@
   **Linux:**
 
   ```
-		cd ./rest-api-server-1.1/; sudo npm install
+		cd ./rest-api-server-1.4/; sudo npm install
 	
   ```	
 
@@ -84,7 +86,7 @@
   ```  
     sudo su
 		
-		cd Code/rest-api-server-1.1/frontend/; npm install -g @angular/cli -n; npm install; ng serve 
+		cd ./Code/rest-api-server-1.4/frontend/; npm install -g @angular/cli -n; npm install; ng serve 
   ```
 ---
 
