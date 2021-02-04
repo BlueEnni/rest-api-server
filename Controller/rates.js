@@ -64,7 +64,7 @@ exports.patchRate = async (req, res, next) => {
     AND deactivatedAt IS NULL
     `, [ rate.tarifName, rate.plz, rate.fixkosten, rate.variableKosten, rate.id ]);
 
-    res.sendStatus(200)
+    res.status(200).send("Rate wurde geändert!");
 
   } catch (e) {
     next(new Error())
@@ -102,7 +102,7 @@ exports.deleteRate = async (req, res, next) => {
       return res.sendStatus(404);
     }
 
-    res.sendStatus(200)
+    res.status(200).send("Rate wurde gelöscht!");
 
   } catch (e) {
     const err = new Error()
@@ -138,7 +138,7 @@ exports.getRateDetails = async (req, res, next) => {
     `, id);
 
     if (rates.length === 0) {
-      err.sendStatus(404)
+      res.sendStatus(404)
     }
 
     const rate = rates.shift();
@@ -151,6 +151,47 @@ exports.getRateDetails = async (req, res, next) => {
   }
 }
 
+/**
+ * Returns one rates.
+ * @function
+ * @async
+ * @param req {e.Request}
+ * @param res {e.Response}
+ * @param next {e.NextFunction}
+ * @returns {any}
+ */
+exports.getRateByEnergyAmountAndPlz = async (req, res, next) => {
+  try {
+    const amount = Number(req.query.amount);
+    const plz = Number(req.query.plz);
+
+    if (isNaN(plz)) {
+      const err = new Error("PLZ muss eine Zahl sein");
+      err.statusCode = 400;
+      return next(err)
+    }
+
+    if (isNaN(amount)) {
+      const err = new Error("Strommenge muss eine Zahl sein");
+      err.statusCode = 400;
+      return next(err)
+    }
+
+    const rates = await db.query(`
+      SELECT id, tarifName, plz, (fixkosten + variableKosten*?) as price
+      FROM rates
+      WHERE deactivatedAt IS NULL
+      AND plz = ?
+      ORDER BY price;
+    `, [ amount, plz ]);
+
+    res.status(200).json(rates);
+  } catch (e) {
+    const err = new Error()
+    err.statusCode = 500;
+    next(err)
+  }
+}
 
 /**
  * Returns all active rates.

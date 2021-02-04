@@ -41,16 +41,17 @@ app.delete("/users/:userId", user.deleteUser);
 // app.get("/users/:userId/orders");
 
 
-app.get("/rates", rates.getAllRates)
-app.get("/rates/:id", rates.getRateDetails)
-app.patch("/rates/:id", rates.patchRate)
-app.delete("/rates/:id", rates.deleteRate)
+app.get("/rates", rates.getAllRates);
+app.get("/rates/byAmount", rates.getRateByEnergyAmountAndPlz);
+app.get("/rates/:id", rates.getRateDetails);
+app.patch("/rates/:id", rates.patchRate);
+app.delete("/rates/:id", rates.deleteRate);
 
-app.get("/orders", orders.getAllOrders)
-app.get("/orders/:orderId", orders.getOrderDetails)
-app.post("/orders", orders.postOrder)
-app.patch("/orders/:orderId", orders.patchOrder)
-app.delete("/orders/:orderId", orders.deleteOrder)
+app.get("/orders", orders.getAllOrders);
+app.get("/orders/:orderId", orders.getOrderDetails);
+app.post("/orders", orders.postOrder);
+app.patch("/orders/:orderId", orders.patchOrder);
+app.delete("/orders/:orderId", orders.deleteOrder);
 
 
 app.post("/ratesupload", storage.single('csv'), rates.importcsv);

@@ -29,7 +29,7 @@ exports.signup = async (req, res, next) => {
     VALUES (?,?,?,?,?)
     `, [ username, firstName, lastName, email, passwordHash ]);
 
-        res.status(201).send();
+        res.status(201).send("User erfolgreich registriert!");
     } catch (e) {
         console.log(e)
         res.status(500).send();
@@ -55,7 +55,7 @@ exports.patchUser = async (req, res, next) => {
         SELECT *
         FROM users
         WHERE id = ?
-        AND deletedAt IS null
+        AND deletedAt IS null;
         `, userId);
 
         if (users.length === 0) {
@@ -86,13 +86,14 @@ exports.patchUser = async (req, res, next) => {
             user.password = bcrypt.encrypt(password);
         }
 
-        await db.query(`
+        await db.query(` 
         UPDATE users
         SET firstName = ?, lastName = ?, username = ?, email = ?, password = ?
-        `, [ user.firstName, user.lastName, user.username, user.email, user.password ]
+        WHERE id = ?;
+        `, [ user.firstName, user.lastName, user.username, user.email, user.password, req.params.id ]
         );
 
-        res.status(200).send()
+        res.status(200).send("Userdaten wurden geändert!")
 
     } catch (e) {
         console.log(e);
@@ -189,9 +190,10 @@ exports.deleteUser = async (req, res, next) => {
         const deleteUserRes = await dbCon.query(`
         UPDATE users
         SET deletedAt = ?
-        `, [ new Date() ]);
+        WHERE id = ?;
+        `, [ req.params.id, new Date() ]);
 
-        res.status(200).send();
+        res.status(200).send("User wurde gelöscht!");
     } catch (e) {
         console.log(e);
         e.statusCode = 500;

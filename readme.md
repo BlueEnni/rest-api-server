@@ -2,7 +2,7 @@
 
 ## Installation manual:
 
-1. Install xampp or a mariadb server on your system. After that create a database called mariadb.
+1. Install a mariadb server on your system. After that create a database called mariadb.
   
   **Linux:**
   
@@ -94,7 +94,7 @@
 - The Backend/API is reachable via http://localhost:3000
 
 
-1. rates upload via postman or any other rest capable system:
+1. rates-upload via postman or any other rest capable system:
     - ***post*** request to:
 	http://localhost:3000/ratesupload
 	
@@ -103,28 +103,160 @@
 		    key: csv
 		    value: <your file path>
     ```
-	
-2. rates request from others e.g. Check24:
+
+
+2. login:
+    - ***post*** request to:
+	http://localhost:3000/login
+
+    ```
+      body: raw/json
+      {
+		    "username": "<<username>>",
+		    "password": "<<password>>"
+      }
+    ```
+
+
+3. registration:
+    - ***post*** request to:
+	http://localhost:3000/signup
+
+    ```
+      body: raw/json
+      {
+		    "username": "<<username>>",
+		    "password": "<<password>>",
+        "email": "<<email>>",
+        "firstName": "<<firstName>>",
+        "lastName": "<<lastName>>"
+      }
+    ```
+
+
+4. request all rates:
     - ***get*** request to:
 	http://localhost:3000/rates
 	
 	
-3. request a specific rate:
+5. request all rates matching the request query (plz and energy amount):
     - ***get*** request to:
-	http://localhost:3000/rates/<rate-id>
+	http://localhost:3000/rates/byAmount
+    ```
+      params/query:
+      key(1): amount
+      value(1): <<energy amount>>
+      key(2): plz
+      value(2): <<plz>> 
+    ```
+
+	
+6. request a specific rate:
+    - ***get*** request to:
+	http://localhost:3000/rates/:rateId
 
 
-4. users request:
+7. change a specific rate:
+    - ***patch*** request to:
+	http://localhost:3000/rates/:rateId
+    ```
+      body: raw/json
+      {
+		    "tarifName": "<<tarifName>>",
+		    "plz": "<<plz>>",
+        "fixkosten": "<<fixkosten>>",
+        "variableKosten": "<<variableKosten>>"
+      }
+    ```   
+
+
+8. delete a specific rate:
+    - ***delete*** request to:
+	http://localhost:3000/rates/:rateId
+
+
+9. request all users:
     - ***get*** request to:
 	http://localhost:3000/users
 	
 
-5. request a specific user:
+10. request a specific user:
     - ***get*** request to:
-	http://localhost:3000/users/<user-id>
-	
-	
-6. error handling for non existent api-url's
+	http://localhost:3000/users/:userId
+
+
+11. change a specific user:
+    - ***patch*** request to:
+	http://localhost:3000/users/:userId
+    ```
+      body: raw/json
+      {
+		    "username": "<<username>>",
+		    "password": "<<password>>",
+        "email": "<<email>>",
+        "firstName": "<<firstName>>",
+        "lastName": "<<lastName>>"
+      }
+    ``` 
+
+
+12. delete a specific user:
+    - ***delete*** request to:
+	http://localhost:3000/users/:userId
+
+
+13. request all orders:
+    - ***get*** request to:
+	http://localhost:3000/orders
+
+
+13. request a specific order:
+    - ***get*** request to:
+	http://localhost:3000/orders/:orderId
+
+
+14. submit an order:
+    - ***post*** request to:
+	http://localhost:3000/orders
+
+    ```
+      body: raw/json
+      {
+		    "rateId": "<<rateId>>",
+		    "userId": "<<userId>>",
+        "consumption": "<<consumption>>",
+        "street": "<<street>>",
+        "streetNumber": "<<streetNumber>>",
+        "zipCode": "<<zipCode>>",
+        "city": "<<city>>"
+      }
+    ```
+
+
+15. change a specific order:
+    - ***patch*** request to:
+	http://localhost:3000/orders/:orderId
+
+    ```
+      body: raw/json
+      {
+		    "rateId": "<<rateId>>",
+		    "userId": "<<userId>>",
+        "consumption": "<<consumption>>",
+        "street": "<<street>>",
+        "streetNumber": "<<streetNumber>>",
+        "zipCode": "<<zipCode>>",
+        "city": "<<city>>"
+      }
+    ```
+
+
+16. delete a specific order:
+    - ***delete*** request to:
+	http://localhost:3000/orders/:orderId
+
+
+17. error handling for non existent api-url's
 
 ---
 

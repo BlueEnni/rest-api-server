@@ -9,10 +9,10 @@ const db = require("../db/database")
  * @return {any}
  */
 exports.postOrder = async (req, res, next) => {
-	const { rateId, consumption, street, streetNumber, zipCode, city } = req.body;
+	const { rateId, userId, consumption, street, streetNumber, zipCode, city } = req.body;
 	try {
 
-		if (isNaN(Number(rateId)) || isNaN(Number(consumption)) || !street || !streetNumber || !zipCode) return res.sendStatus(400);
+		if (isNaN(Number(rateId)) || isNaN(Number(consumption)) || isNaN(Number(userId)) || !street || !streetNumber || !zipCode) return res.sendStatus(400);
 
 		const connection = await db.getConnection()
 
@@ -28,7 +28,7 @@ exports.postOrder = async (req, res, next) => {
 		VALUES (
 			?,?,?,?,?
 		)`,
-			[ street, streetNumber, zipCode, city, null ] // @todo repalce null with userId once authentication is added
+			[ street, streetNumber, zipCode, city, userId ] // @todo add authentification to userId once authentication is added
 		);
 
 		const addressId = addressResult.insertId;
@@ -42,7 +42,7 @@ exports.postOrder = async (req, res, next) => {
 			, consumption
 		)
 		VALUES (?,?,?,?)`, [
-			null, // @todo repalce null with userId once authentication is added
+			userId, // @todo authentification to userId once authentication is added
 			rateId,
 			addressId,
 			consumption
@@ -50,7 +50,7 @@ exports.postOrder = async (req, res, next) => {
 
 		connection.release()
 
-		res.status(201).json(orderResult.insertId);
+		res.status(201).json({ id: orderResult.insertId, message: 'Bestellung wurde angelegt!' });
 
 	} catch (e) {
 		next(e);
@@ -144,7 +144,7 @@ exports.patchOrder = async (req, res, next) => {
 		`, [ consumption, orderId ]);
 
 
-		res.sendStatus(200);
+		res.status(200).send("Bestelldaten wurden geändert!");
 	} catch (e) {
 		next(e)
 	}
@@ -170,7 +170,7 @@ exports.deleteOrder = async (req, res, next) => {
 
 		if (orderResult.affectedRows === 0) return res.sendStatus(404);
 
-		res.status(200).json(orderId);
+		res.status(200).json({ order: orderId, message: "Bestellung wurde gelöscht!" });
 	} catch (e) {
 		next(e);
 	}
