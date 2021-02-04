@@ -83,14 +83,14 @@ exports.patchUser = async (req, res, next) => {
         }
 
         if (password) {
-            user.password = bcrypt.encrypt(password);
+            user.password = await bcrypt.encrypt(password);
         }
 
         await db.query(` 
         UPDATE users
         SET firstName = ?, lastName = ?, username = ?, email = ?, password = ?
         WHERE id = ?;
-        `, [ user.firstName, user.lastName, user.username, user.email, user.password, userId ]
+        `, [ user.firstName, user.lastName, user.username, user.email, user.password, user.id ]
         );
 
         res.status(200).send("Userdaten wurden geändert!")
@@ -191,7 +191,7 @@ exports.deleteUser = async (req, res, next) => {
         UPDATE users
         SET deletedAt = ?
         WHERE id = ?;
-        `, [ req.params.id, new Date() ]);
+        `, [ new Date(), userId ]);
 
         res.status(200).send("User wurde gelöscht!");
     } catch (e) {
