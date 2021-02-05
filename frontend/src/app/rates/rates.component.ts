@@ -52,7 +52,7 @@ export class RatesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.http.get<Rate[]>(`${environment.API_LOCATION}/rates`)
+    this.http.get<Rate[]>(`${environment.API_LOCATION}/rates/all`)
       .subscribe(result => {
 
         this.allRates = this.dataSource.data = result.map((rate): RatesData => {

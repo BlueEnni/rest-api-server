@@ -162,8 +162,8 @@ exports.getRateDetails = async (req, res, next) => {
  */
 exports.getRateByEnergyAmountAndPlz = async (req, res, next) => {
   try {
-    const amount = Number(req.query.amount);
-    const plz = Number(req.query.plz);
+    const amount = Number(req.query.consumption);
+    const plz = Number(req.query.zipCode);
 
     if (isNaN(plz)) {
       const err = new Error("PLZ muss eine Zahl sein");
@@ -178,12 +178,12 @@ exports.getRateByEnergyAmountAndPlz = async (req, res, next) => {
     }
 
     const rates = await db.query(`
-      SELECT id, tarifName, plz, (fixkosten + variableKosten*?) as price
+      SELECT id, tarifName as title, plz as zipCode, variableKosten as pricePerUnit, fixkosten as basicPrice, ? as consumption, (fixkosten + variableKosten*?) as calculatedPricePerYear
       FROM rates
       WHERE deactivatedAt IS NULL
       AND plz = ?
-      ORDER BY price;
-    `, [ amount, plz ]);
+      ORDER BY calculatedPricePerYear;
+    `, [ amount, amount, plz ]);
 
     res.status(200).json(rates);
   } catch (e) {

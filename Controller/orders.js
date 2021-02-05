@@ -9,12 +9,26 @@ const db = require("../db/database")
  * @return {any}
  */
 exports.postOrder = async (req, res, next) => {
-	const { rateId, userId, consumption, street, streetNumber, zipCode, city } = req.body;
+	const { firstName, lastName, street, streetNumber, zipCode, city, rateId, consumption, agent } = req.body;
 	try {
 
-		if (isNaN(Number(rateId)) || isNaN(Number(consumption)) || isNaN(Number(userId)) || !street || !streetNumber || !zipCode) return res.sendStatus(400);
+		if (isNaN(Number(rateId)) || isNaN(Number(consumption)) || isNaN(Number(zipCode)) || !firstName || !lastName || !street || !streetNumber || !city || !agent) return res.sendStatus(400);
 
 		const connection = await db.getConnection()
+
+		const personResult = await connection.query(`
+		INSERT INTO persons
+		(
+			firstName
+			, lastName
+		) 
+		VALUES (
+			?,?
+		)`,
+			[ firstName, lastName ] // @todo add authentification to userId once authentication is added
+		);
+
+		const personId = personResult.insertId;
 
 		const addressResult = await connection.query(`
 		INSERT INTO addresses
@@ -23,30 +37,29 @@ exports.postOrder = async (req, res, next) => {
 			, streetNumber
 			, zipCode
 			, city
-			, userId
+			, personId
 		) 
 		VALUES (
 			?,?,?,?,?
 		)`,
-			[ street, streetNumber, zipCode, city, userId ] // @todo add authentification to userId once authentication is added
+			[ street, streetNumber, zipCode, city, personId ]
 		);
 
-		const addressId = addressResult.insertId;
 
 		const orderResult = await db.query(`
 		INSERT INTO orders
 		(
-			userId
+			personId
 			, rateId
-			, addressId
 			, consumption
+			, agent
 		)
 		VALUES (?,?,?,?)`, [
-			userId, // @todo authentification to userId once authentication is added
+			personId,
 			rateId,
-			addressId,
-			consumption
-		])
+			consumption,
+			agent
+		]);
 
 		connection.release()
 
@@ -67,10 +80,14 @@ exports.postOrder = async (req, res, next) => {
 exports.getAllOrders = async (req, res, next) => {
 	try {
 		const orders = await db.query(`
-		SELECT id, userId, rateId, addressId, consumption
-		FROM orders
-		WHERE deletedAt IS null
-		` )
+		SELECT o.id, o.rateId, o.consumption, o.agent, p.firstName, p.lastName, a.street, a.streetNumber, a.zipCode, a.city
+		FROM orders as o
+		inner JOIN persons as p
+		ON p.id = o.personId
+		inner JOIN addresses as a
+		ON a.personId = p.id
+		WHERE o.deletedAt IS null
+		;` )
 
 		res.json(orders);
 	} catch (e) {
@@ -93,11 +110,15 @@ exports.getOrderDetails = async (req, res, next) => {
 		if (isNaN(Number(orderId))) return res.sendStatus(400);
 
 		const orders = await db.query(`
-		SELECT id, userId, rateId, addressId, consumption
-		FROM orders
-		WHERE id = ?
-		AND deletedAt IS null
-		`	, orderId
+		SELECT o.id, o.rateId, o.consumption, o.agent, p.firstName, p.lastName, a.street, a.streetNumber, a.zipCode, a.city
+		FROM orders as o
+		inner JOIN persons as p
+		ON p.id = o.personId
+		inner JOIN addresses as a
+		ON a.personId = p.id
+		WHERE o.deletedAt IS null
+		AND o.id = ?
+		;`	, orderId
 		);
 		const order = orders.pop();
 
@@ -120,30 +141,79 @@ exports.getOrderDetails = async (req, res, next) => {
  */
 exports.patchOrder = async (req, res, next) => {
 	const orderId = req.params.orderId;
-	const { consumption: consumptionBody } = req.body
+	const { firstName: firstNameBody, lastName: lastNameBody, street: streetBody, streetNumber: streetNumberBody, zipCode: zipCodeBody, city: cityBody, rateId: rateIdBody, consumption: consumptionBody, agent: agentBody } = req.body
 	console.log(req.body)
 	try {
 		const orders = await db.query(`
-			SELECT *
-			FROM orders
-			WHERE id = ?`, orderId
-		);
+		SELECT o.id, o.personId, o.rateId, o.consumption, o.agent, p.firstName, p.lastName, a.street, a.streetNumber, a.zipCode, a.city
+		FROM orders as o
+		JOIN persons as p
+		ON p.id = o.id
+		JOIN addresses as a
+		ON a.id = p.id
+		WHERE o.deletedAt IS null
+		AND o.id = ?
+		;`, orderId);
 
-		const order = orders.pop()
+		const order = orders.pop();
 
 		if (!order) return res.sendStatus(404);
 
-		let { consumption } = order;
+		let { firstName, lastName, street, streetNumber, zipCode, city, rateId, consumption, agent, personId } = order;
+
+		if (`firstName` in req.body) {
+			firstName = firstNameBody;
+		}
+
+		if (`lastName` in req.body) {
+			lastName = lastNameBody;
+		}
+
+		if (`street` in req.body) {
+			street = streetBody;
+		}
+
+		if (`streetNumber` in req.body) {
+			streetNumber = streetNumberBody;
+		}
+
+		if (`zipCode` in req.body) {
+			zipCode = zipCodeBody;
+		}
+
+		if (`city` in req.body) {
+			city = cityBody;
+		}
+
+		if (`rateId` in req.body) {
+			rateId = rateIdBody;
+		}
 
 		if (`consumption` in req.body) {
 			consumption = consumptionBody;
 		}
 
+		if (`agent` in req.body) {
+			agent = agentBody;
+		}
+
+		await db.query(`
+			UPDATE persons
+			SET firstName = ?, lastName = ?
+			WHERE id = ?
+		`, [ firstName, lastName, personId ]);
+
 		await db.query(`
 			UPDATE orders
-			SET consumption = ?
-			WHERE id = ?
-		`, [ consumption, orderId ]);
+			SET consumption = ?, rateId = ?, consumption = ?, agent = ?
+			WHERE personId = ?
+		`, [ consumption, rateId, consumption, agent, personId ]);
+
+		await db.query(`
+			UPDATE addresses
+			SET street = ?, streetNumber = ?, zipCode = ?, city = ?
+			WHERE personId = ?
+		`, [ street, streetNumber, zipCode, city, personId ]);
 
 
 		res.status(200).send("Bestelldaten wurden geändert!");
@@ -165,12 +235,27 @@ exports.deleteOrder = async (req, res, next) => {
 
 	try {
 
-		const orderResult = await db.query(`
+		const orderResults = await db.query(`
+				SELECT o.id, o.deletedAt
+				FROM orders as o
+				WHERE o.deletedAt IS null
+				AND o.id = ?
+				;`, orderId);
+
+		orderResult = orderResults.shift();
+
+		if (!orderResult) {
+			const err = new Error('Bestellung existiert nicht!');
+			err.statusCode = 404;
+			return next(err);
+		}
+
+		const orderResultUpdate = await db.query(`
 		UPDATE orders
 		SET deletedAt = ?
 		WHERE id = ?`, [ new Date(), orderId ]);
 
-		if (orderResult.affectedRows === 0) return res.sendStatus(404);
+		if (orderResultUpdate.affectedRows === 0) return res.sendStatus(404);
 
 		res.status(200).json({ order: orderId, message: "Bestellung wurde gelöscht!" });
 	} catch (e) {

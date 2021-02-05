@@ -41,8 +41,8 @@ app.delete("/users/:userId", user.deleteUser);
 // app.get("/users/:userId/orders");
 
 
-app.get("/rates", rates.getAllRates);
-app.get("/rates/byAmount", rates.getRateByEnergyAmountAndPlz);
+app.get("/rates", rates.getRateByEnergyAmountAndPlz);
+app.get("/rates/all", rates.getAllRates);
 app.get("/rates/:id", rates.getRateDetails);
 app.patch("/rates/:id", rates.patchRate);
 app.delete("/rates/:id", rates.deleteRate);

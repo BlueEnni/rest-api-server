@@ -24,15 +24,23 @@ exports.signup = async (req, res, next) => {
 
         // checks
 
-        const result = await db.query(`
-    INSERT INTO users (username, firstName, lastName, email, password) 
-    VALUES (?,?,?,?,?)
-    `, [ username, firstName, lastName, email, passwordHash ]);
+
+        const personResult = await db.query(`
+    INSERT INTO persons (firstName, lastName) 
+    VALUES (?,?)
+    `, [ firstName, lastName ]);
+
+        personId = personResult.insertId;
+
+        const userResult = await db.query(`
+    INSERT INTO users (username, email, password, personId) 
+    VALUES (?,?,?,?)
+    `, [ username, email, passwordHash, personId ]);
 
         res.status(201).send("User erfolgreich registriert!");
     } catch (e) {
         console.log(e)
-        res.status(500).send();
+        res.status(500).json({ message: "Username oder E-Mail bereits registriert!", error: e });
     }
 
 }
@@ -52,10 +60,14 @@ exports.patchUser = async (req, res, next) => {
         const { firstName, lastName, username, email, password } = req.body;
 
         const users = await db.query(`
-        SELECT *
-        FROM users
-        WHERE id = ?
-        AND deletedAt IS null;
+        SELECT u.id, p.id as pId, p.firstName, p.lastName, u.username, u.email, u.password
+        FROM users as u
+        inner JOIN persons as p
+        ON p.id = u.personId
+        WHERE u.deletedAt IS null
+        AND p.deletedAt IS null
+        AND u.personId IS NOT null
+        AND u.id = ?
         `, userId);
 
         if (users.length === 0) {
@@ -88,9 +100,16 @@ exports.patchUser = async (req, res, next) => {
 
         await db.query(` 
         UPDATE users
-        SET firstName = ?, lastName = ?, username = ?, email = ?, password = ?
+        SET username = ?, email = ?, password = ?
+        WHERE personId = ?;
+        `, [ user.username, user.email, user.password, user.pId ]
+        );
+
+        await db.query(` 
+        UPDATE persons
+        SET firstName = ?, lastName = ?
         WHERE id = ?;
-        `, [ user.firstName, user.lastName, user.username, user.email, user.password, user.id ]
+        `, [ user.firstName, user.lastName, user.pId ]
         );
 
         res.status(200).send("Userdaten wurden geändert!")
@@ -115,11 +134,15 @@ exports.getUser = async (req, res, next) => {
         const { userId } = req.params;
 
         const users = await db.query(`
-        SELECT id,firstName,lastName, username, email
-        FROM users
-        WHERE id = ?
-        AND deletedAt IS null
-        `, userId);
+        SELECT u.id, p.firstName, p.lastName, u.username, u.email
+        FROM users as u
+        inner JOIN persons as p
+        ON p.id = u.personId
+        WHERE u.deletedAt IS null
+        AND p.deletedAt IS null
+        AND u.personId IS NOT null
+        AND u.id = ?
+        ;`, userId);
 
         if (users.length === 0) {
             const e = new Error('User nicht gefunden');
@@ -148,10 +171,14 @@ exports.getUser = async (req, res, next) => {
 exports.getAll = async (req, res, next) => {
     try {
         const users = await db.query(`
-        SELECT id,firstName,lastName, username, email
-        FROM users
-        WHERE deletedAt IS null
-        `);
+        SELECT u.id, p.firstName, p.lastName, u.username, u.email
+        FROM users as u
+        inner JOIN persons as p
+        ON p.id = u.personId
+        WHERE u.deletedAt IS null
+        AND p.deletedAt IS null
+        AND u.personId IS NOT null
+        ;`);
 
         res.json(users);
     } catch (e) {
@@ -175,23 +202,36 @@ exports.deleteUser = async (req, res, next) => {
     try {
         const { userId } = req.params;
         const dbCon = await db.getConnection();
-        const users = await dbCon.query(`
-        SELECT * 
-        FROM users
-        WHERE id = ?;
+        const userPersonResult = await dbCon.query(`
+        SELECT *
+        FROM users as u
+        inner JOIN persons as p
+        ON p.id = u.personId
+        WHERE u.id = ?
+        AND u.deletedAt IS null;
         `, userId);
 
-        if (users.length === 0) {
-            const err = new Error('User existiert nicht');
+        const person = userPersonResult.shift();
+
+        if (!person) {
+            const err = new Error('User existiert nicht!');
             err.statusCode = 404;
             return next(err);
         }
+
+        const personId = person.personId;
 
         const deleteUserRes = await dbCon.query(`
         UPDATE users
         SET deletedAt = ?
         WHERE id = ?;
         `, [ new Date(), userId ]);
+
+        const deletePersonRes = await dbCon.query(`
+        UPDATE persons
+        SET deletedAt = ?
+        WHERE id = ?;
+        `, [ new Date(), personId ]);
 
         res.status(200).send("User wurde gelöscht!");
     } catch (e) {
