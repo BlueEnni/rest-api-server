@@ -8,6 +8,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import * as cookies from 'js-cookie';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -54,7 +55,7 @@ export class LoginComponent implements OnInit {
       password
     }
     // body.username = username2;
-    this.http.post('http://localhost:3000/login', body).subscribe(res => {
+    this.http.post(`${environment.API_LOCATION}/login`, body).subscribe(res => {
       // res ist die server response
       // die and .subscribe funktion übergebende funktion läuft wenn der resquest beendet ist
       cookies.set('token', res as string);

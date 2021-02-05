@@ -96,18 +96,6 @@ exports.createTables = async () => {
 
   createTablePromises.push(
     dbConnection.query(`
-        CREATE TABLE IF NOT EXISTS stromanbieter (
-        id INTEGER AUTO_INCREMENT,
-        name VARCHAR(60),
-        title VARCHAR(255),
-        year INTEGER
-        CHECK(LENGTH(NAME) >= 10),
-        PRIMARY KEY (id)
-      );` )
-  )
-
-  createTablePromises.push(
-    dbConnection.query(`
       CREATE TABLE IF NOT EXISTS rates (
       id INTEGER AUTO_INCREMENT,
       tarifName VARCHAR(255),
@@ -161,6 +149,7 @@ exports.createTables = async () => {
       , rateId INTEGER
       , addressId INTEGER
       , consumption INTEGER
+      , agent VARCHAR(60)
       , deletedAt DATETIME
       
       , FOREIGN KEY (addressId) REFERENCES addresses(id)

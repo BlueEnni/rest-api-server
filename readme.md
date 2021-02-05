@@ -138,18 +138,18 @@
 
 4. request all rates:
     - ***get*** request to:
-	http://localhost:3000/rates
+	http://localhost:3000/rates/all
 	
 	
 5. request all rates matching the request query (plz and energy amount):
     - ***get*** request to:
-	http://localhost:3000/rates/byAmount
+	http://localhost:3000/rates
     ```
       params/query:
-      key(1): amount
-      value(1): <<energy amount>>
-      key(2): plz
-      value(2): <<plz>> 
+      key(1): consumption
+      value(1): <<energy amount per year>>
+      key(2): zipCode
+      value(2): <<zipCode>> 
     ```
 
 	

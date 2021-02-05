@@ -9,12 +9,26 @@ const db = require("../db/database")
  * @return {any}
  */
 exports.postOrder = async (req, res, next) => {
-	const { rateId, userId, consumption, street, streetNumber, zipCode, city } = req.body;
+	const { firstName, lastName, street, streetNumber, zipCode, city, rateId, consumption, agent } = req.body;
 	try {
 
-		if (isNaN(Number(rateId)) || isNaN(Number(consumption)) || isNaN(Number(userId)) || !street || !streetNumber || !zipCode) return res.sendStatus(400);
+		if (isNaN(Number(rateId)) || isNaN(Number(consumption)) || isNaN(Number(zipCode)) || !firstName || !lastName || !street || !streetNumber || !city || !agent) return res.sendStatus(400);
 
 		const connection = await db.getConnection()
+
+		const usersResult = await connection.query(`
+		INSERT INTO users
+		(
+			firstName
+			, lastName
+		) 
+		VALUES (
+			?,?
+		)`,
+			[ firstName, lastName ] // @todo add authentification to userId once authentication is added
+		);
+
+		const userId = await usersResult.insertId;
 
 		const addressResult = await connection.query(`
 		INSERT INTO addresses
@@ -31,7 +45,7 @@ exports.postOrder = async (req, res, next) => {
 			[ street, streetNumber, zipCode, city, userId ] // @todo add authentification to userId once authentication is added
 		);
 
-		const addressId = addressResult.insertId;
+		const addressId = await addressResult.insertId;
 
 		const orderResult = await db.query(`
 		INSERT INTO orders
@@ -40,13 +54,15 @@ exports.postOrder = async (req, res, next) => {
 			, rateId
 			, addressId
 			, consumption
+			, agent
 		)
 		VALUES (?,?,?,?)`, [
 			userId, // @todo authentification to userId once authentication is added
 			rateId,
 			addressId,
-			consumption
-		])
+			consumption,
+			agent
+		]);
 
 		connection.release()
 
