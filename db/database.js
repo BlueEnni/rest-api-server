@@ -126,30 +126,24 @@ exports.createTables = async () => {
 
   await dbConnection.query(`
       CREATE TABLE IF NOT EXISTS users (
-      id INTEGER AUTO_INCREMENT,
-      username VARCHAR(50),
-      email VARCHAR(50),
+      id INTEGER AUTO_INCREMENT PRIMARY KEY,
+      username VARCHAR(50) UNIQUE,
+      email VARCHAR(50) UNIQUE,
       password VARCHAR(62),
       personId INTEGER, 
-      deletedAt DATETIME
-      PRIMARY KEY (id),
-      FOREIGN KEY (personId)
-      REFERENCES persons(id)
-      ON DELETE CASCADE
+      deletedAt DATETIME,
+      FOREIGN KEY (personId) REFERENCES persons(id) ON DELETE CASCADE
       );` );
 
   await dbConnection.query(`
       CREATE TABLE IF NOT EXISTS addresses (
-      id INTEGER AUTO_INCREMENT,
+      id INTEGER AUTO_INCREMENT PRIMARY KEY,
       street VARCHAR(60),
       streetNumber VARCHAR(255),
       zipCode INTEGER,
       city VARCHAR(255),
       personId INTEGER,
-      PRIMARY KEY (id),
-      FOREIGN KEY (personId) 
-      REFERENCES persons(id)
-      ON DELETE CASCADE
+      FOREIGN KEY (personId) REFERENCES persons(id) ON DELETE CASCADE
       );` );
 
   await dbConnection.query(`
@@ -161,7 +155,6 @@ exports.createTables = async () => {
       , consumption INTEGER
       , agent VARCHAR(60)
       , deletedAt DATETIME
-      
       , FOREIGN KEY (rateId) REFERENCES rates(id)
       , FOREIGN KEY (personId) REFERENCES persons(id)
       );` );
