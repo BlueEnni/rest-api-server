@@ -110,13 +110,10 @@ exports.createTables = async () => {
 
   createTablePromises.push(
     dbConnection.query(`
-        CREATE TABLE IF NOT EXISTS users (
+        CREATE TABLE IF NOT EXISTS persons (
         id INTEGER AUTO_INCREMENT,
         firstName VARCHAR(50),
         lastName VARCHAR(50),
-        username VARCHAR(50),
-        email VARCHAR(50),
-        password VARCHAR(62), 
         deletedAt DATETIME
         CHECK(LENGTH(firstName) >= 2),
         CHECK(LENGTH(lastName) >= 2),
@@ -128,16 +125,30 @@ exports.createTables = async () => {
   await Promise.all(createTablePromises);
 
   await dbConnection.query(`
+      CREATE TABLE IF NOT EXISTS users (
+      id INTEGER AUTO_INCREMENT,
+      username VARCHAR(50),
+      email VARCHAR(50),
+      password VARCHAR(62),
+      personId INTEGER, 
+      deletedAt DATETIME
+      PRIMARY KEY (id),
+      FOREIGN KEY (personId)
+      REFERENCES persons(id)
+      ON DELETE CASCADE
+      );` );
+
+  await dbConnection.query(`
       CREATE TABLE IF NOT EXISTS addresses (
       id INTEGER AUTO_INCREMENT,
       street VARCHAR(60),
       streetNumber VARCHAR(255),
       zipCode INTEGER,
       city VARCHAR(255),
-      userId INTEGER,
+      personId INTEGER,
       PRIMARY KEY (id),
-      FOREIGN KEY (userId) 
-      REFERENCES users(id)
+      FOREIGN KEY (personId) 
+      REFERENCES persons(id)
       ON DELETE CASCADE
       );` );
 
@@ -145,16 +156,14 @@ exports.createTables = async () => {
       CREATE TABLE IF NOT EXISTS orders (
       id INT NOT NULL AUTO_INCREMENT PRIMARY KEY
       
-      , userId INTEGER
+      , personId INTEGER
       , rateId INTEGER
-      , addressId INTEGER
       , consumption INTEGER
       , agent VARCHAR(60)
       , deletedAt DATETIME
       
-      , FOREIGN KEY (addressId) REFERENCES addresses(id)
       , FOREIGN KEY (rateId) REFERENCES rates(id)
-      , FOREIGN KEY (userId) REFERENCES users(id)
+      , FOREIGN KEY (personId) REFERENCES persons(id)
       );` );
 
   dbConnection.release();
