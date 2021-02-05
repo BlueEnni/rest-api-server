@@ -24,9 +24,9 @@
   **Linux:**
   
   ```
-    sudo wget https://github.com/BlueEnni/rest-api-server/archive/1.5.zip;
+    sudo wget https://github.com/BlueEnni/rest-api-server/archive/1.7.zip;
     
-    mkdir Code; mv ./1.5.zip ./Code/; cd Code/; unzip 1.5.zip
+    mkdir Code; mv ./1.7.zip ./Code/; cd Code/; unzip 1.7.zip
   ```
 
 3. Now go into the code folder until you are on the same root level as the app.js file is and use 'npm install' to get all required dependencies:
@@ -34,7 +34,7 @@
   **Linux:**
 
   ```
-		cd ./rest-api-server-1.5/; sudo npm install
+		cd ./rest-api-server-1.7/; sudo npm install
 	
   ```	
 
@@ -86,7 +86,7 @@
   ```  
     sudo su
 		
-		cd ./Code/rest-api-server-1.5/frontend/; npm install -g @angular/cli -n; npm install; ng serve 
+		cd ./Code/rest-api-server-1.7/frontend/; npm install -g @angular/cli -n; npm install; ng serve 
   ```
 ---
 
@@ -224,13 +224,15 @@
     ```
       body: raw/json
       {
-		    "rateId": "<<rateId>>",
-		    "userId": "<<userId>>",
-        "consumption": "<<consumption>>",
+		    "firstName": "<<firstName>>",
+		    "lastName": "<<lastName>>",
         "street": "<<street>>",
         "streetNumber": "<<streetNumber>>",
         "zipCode": "<<zipCode>>",
-        "city": "<<city>>"
+        "city": "<<city>>",
+        "rateId": "<<rateId>>",
+        "consumption": "<<consumption>>",
+        "agent": "<<agent>>"
       }
     ```
 
@@ -242,13 +244,15 @@
     ```
       body: raw/json
       {
-		    "rateId": "<<rateId>>",
-		    "userId": "<<userId>>",
-        "consumption": "<<consumption>>",
+		    "firstName": "<<firstName>>",
+		    "lastName": "<<lastName>>",
         "street": "<<street>>",
         "streetNumber": "<<streetNumber>>",
         "zipCode": "<<zipCode>>",
-        "city": "<<city>>"
+        "city": "<<city>>",
+        "rateId": "<<rateId>>",
+        "consumption": "<<consumption>>",
+        "agent": "<<agent>>"
       }
     ```
 

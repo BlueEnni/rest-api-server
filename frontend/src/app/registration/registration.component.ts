@@ -57,8 +57,14 @@ export class RegistrationComponent implements OnInit {
       this.router.navigate([ `/login` ]).catch();
     }, error => {
       console.log(error);
-      this.isSubmitting = false;
-      this._snackBar.open(`Registrierung fehlgeschlagen!`, `close`, { duration: 4000 });
+      if (error.status == 201) {
+        this._snackBar.open(`Registrierung erfolgreich!`, `close`, { duration: 4000 });
+        this.router.navigate([ `/login` ]).catch();
+      }
+      else {
+        this._snackBar.open(`Registrierung fehlgeschlagen!`, `close`, { duration: 4000 });
+        this.isSubmitting = false;
+      }
     });
   }
 }
